@@ -23,6 +23,46 @@ public class PersonnageDetails {
 
     @Embedded(prefix = "armor_")
     public Armor armor;
+
+    public Personnage getPersonnage() {
+        return personnage;
+    }
+
+    public void setPersonnage(Personnage personnage) {
+        this.personnage = personnage;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
+    }
+
+    public Classe getClasse() {
+        return classe;
+    }
+
+    public void setClasse(Classe classe) {
+        this.classe = classe;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Armor armor) {
+        this.armor = armor;
+    }
 }
 
 

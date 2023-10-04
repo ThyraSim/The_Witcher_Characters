@@ -59,4 +59,32 @@
         android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSkillCost" />
+
+    <TextView
+        android:id="@+id/txtPersoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="227dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtPersoArmorName"
+        app:layout_constraintStart_toStartOf="@+id/txtPersoArmorName" />
+
+    <TextView
+        android:id="@+id/txtPersoArmorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="22dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPersoName" />
+
+    <TextView
+        android:id="@+id/txtOwnedSkillName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPersoArmorName" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

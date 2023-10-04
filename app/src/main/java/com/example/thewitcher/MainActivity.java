@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import com.example.thewitcher.Entity.OwnedGear;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.Personnage;
+import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.ClassWithSkills;
 import com.example.thewitcher.Entity.classe.Classe;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Membres
     private TextView txtName, txtId, txtSkill, txtSkillName, txtSkillId, txtSkillCost;
+    private TextView txtPersoName, txtPersoArmorName, txtOwnedSkillName;
     private BaseRepository baseRepository;
     private LiveData<List<Classe>> classeListLiveData;
     private LiveData<List<Race>> raceListLiveData;
@@ -114,6 +116,20 @@ public class MainActivity extends AppCompatActivity {
         });
         skillObserveEntityListAsyncTask.execute();
 
+//        Personnage nouvPerso = new Personnage(1, "Gerorge", 20, 1, 1, 1, 1);
+//        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(1, 27, 1, 1));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(2, 12, 1, 3));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(3, 35, 1, 5));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(4, 7, 1, 2));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(5, 42, 1, 4));
+
+        int personnageId = 1;
+        int ownedSkillId = 1;
+
+        updatePersonnageName(personnageId);
+        updatePersonnageArmorName(personnageId);
+        updateOwnedSkillName(ownedSkillId);
     }
     private void setListeners(){
 
@@ -127,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
         txtSkillName = findViewById(R.id.txtSkillName);
         txtSkillId = findViewById(R.id.txtSkillId);
         txtSkillCost = findViewById(R.id.txtSkillCost);
+        txtPersoName = findViewById(R.id.txtPersoName);
+        txtPersoArmorName = findViewById(R.id.txtPersoArmorName);
+        txtOwnedSkillName = findViewById(R.id.txtOwnedSkillName);
     }
 
     //Fonction pour créer n'importe quelle entité
@@ -221,4 +240,48 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    public void updatePersonnageName(int personnageId) {
+        LiveData<Personnage> personnageLiveData = baseRepository.findPersonnageById(personnageId);
+        observeEntityOnce(personnageLiveData, this::displayPersonnageName);
+    }
+
+    private void displayPersonnageName(Personnage personnage) {
+        txtPersoName.setText(personnage.getName());
+    }
+
+    public void updatePersonnageArmorName(int personnageId) {
+        LiveData<PersonnageDetails> personnageDetailsLiveData = baseRepository.findPersonnageDetails(personnageId);
+        observeEntityOnce(personnageDetailsLiveData, personnageDetails -> txtPersoArmorName.setText(personnageDetails.getArmor().getName()));
+    }
+
+    public void updateOwnedSkillName(int ownedSkillId) {
+        LiveData<OwnedSkill> ownedSkillLiveData = baseRepository.findOwnedSkillById(ownedSkillId);
+        observeEntityOnce(ownedSkillLiveData, this::displayOwnedSkillName);
+    }
+
+    private void displayOwnedSkillName(OwnedSkill ownedSkill) {
+        if (ownedSkill != null) {
+            LiveData<Skill> skillLiveData = baseRepository.findSkillById(ownedSkill.getSkillId());
+            observeEntityOnce(skillLiveData, skill -> {
+                if (skill != null) {
+                    txtOwnedSkillName.setText(skill.getNomSkill());
+                }
+            });
+        }
+    }
+
+    private <T> void observeEntityOnce(LiveData<T> liveData, Consumer<T> action) {
+        Observer<T> observer = new Observer<T>() {
+            @Override
+            public void onChanged(T t) {
+                action.accept(t);  // Use data here
+                liveData.removeObserver(this);  // Stop observing
+            }
+        };
+        liveData.observe(this, observer);
+    }
+
+
+
 }
