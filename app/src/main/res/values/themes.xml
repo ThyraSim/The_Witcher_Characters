@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.TheWitcher" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.TheWitcher" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/backgroundColor</item>
+        <item name="colorPrimaryDark">@color/backgroundColor</item>
     </style>
 
     <style name="Theme.TheWitcher" parent="Base.Theme.TheWitcher" />

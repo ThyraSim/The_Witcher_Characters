@@ -28,7 +28,10 @@ import com.example.thewitcher.dao.gear.ArmorDao;
 import com.example.thewitcher.dao.gear.WeaponDao;
 import com.example.thewitcher.dao.race.RaceDao;
 import com.example.thewitcher.repository.BaseRepository;
+import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
+import com.example.thewitcher.converters.Converters;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -72,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
         Classe classe = new Classe(1, "Bard", "Busking (EMP)", "A Bard is a wonderful thing to have around", 0, "None");
 
-//        new InsertEntityAsyncTask<Classe>(classeDao).execute(classe);
+        new InsertEntityAsyncTask<Classe>(classeDao).execute(classe);
         Skill skill = new Skill(1, "Perception", 2);
-//        new InsertEntityAsyncTask<Skill>(skillDao).execute(skill);
+        new InsertEntityAsyncTask<Skill>(skillDao).execute(skill);
 
         //Récupération des classes dans la BD
         classeListLiveData = new BaseRepository<Classe>(classeDao).findAll();
@@ -87,23 +90,23 @@ public class MainActivity extends AppCompatActivity {
         });
         observeClasseListAsyncTask.execute();
 
-//        skillListLiveData = new BaseRepository<Skill>(skillDao).findAll();
-//        ObserveEntityListAsyncTask<Skill> observeSkillListAsyncTask = new ObserveEntityListAsyncTask<>(skillListLiveData, new Consumer<Skill>() {
-//            @Override
-//            public void accept(Skill skill) {
-//                updateTextViewsSkill(skill);
-//            }
-//        });
-//        observeSkillListAsyncTask.execute();
+        skillListLiveData = new BaseRepository<Skill>(skillDao).findAll();
+        ObserveEntityListAsyncTask<Skill> observeSkillListAsyncTask = new ObserveEntityListAsyncTask<>(skillListLiveData, new Consumer<Skill>() {
+           @Override
+            public void accept(Skill skill) {
+                updateTextViewsSkill(skill);
+            }
+       });
+        observeSkillListAsyncTask.execute();
 
-//        ClassWithSkills classWithSkills = new ClassWithSkills();
-//        classWithSkills.classe = classe;
-//        List<Skill> skills = new ArrayList<>();
-//        skills.add(skill);
-//        classWithSkills.skills = skills;
+        ClassWithSkills classWithSkills = new ClassWithSkills();
+        classWithSkills.classe = classe;
+        List<Skill> skills = new ArrayList<>();
+        skills.add(skill);
+        classWithSkills.skills = skills;
 
-//        Converters converters = new Converters(database, this);
-//        new InsertEntityAsyncTask<ClasseSkillCrossRef>(classeSkillCrossRefDao).execute(converters.mapToClasseSkillCrossRef(classWithSkills));
+        Converters converters = new Converters(database, this);
+        new InsertEntityAsyncTask<ClasseSkillCrossRef>(classeSkillCrossRefDao).execute(converters.mapToClasseSkillCrossRef(classWithSkills));
 
         //Récupération des skills dans la BD
         LiveData<List<Skill>> skillsFromClassLiveData = baseRepository.findSkillsByClassId(1);
@@ -116,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
         });
         skillObserveEntityListAsyncTask.execute();
 
-//        Personnage nouvPerso = new Personnage(1, "Gerorge", 20, 1, 1, 1, 1);
-//        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
-//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(1, 27, 1, 1));
-//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(2, 12, 1, 3));
-//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(3, 35, 1, 5));
-//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(4, 7, 1, 2));
-//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(5, 42, 1, 4));
+        Personnage nouvPerso = new Personnage(1, "Gerorge", 20, 1, 1, 1, 1);
+        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
+       new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(1, 27, 1, 1));
+        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(2, 12, 1, 3));
+        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(3, 35, 1, 5));
+        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(4, 7, 1, 2));
+        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(5, 42, 1, 4));
 
         int personnageId = 1;
         int ownedSkillId = 1;
@@ -211,9 +214,9 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                txtSkillName.setText(classWithSkills.skills.get(0).getNomSkill());
-//                txtSkillId.setText(String.valueOf(classWithSkills.skills.get(0).getSkillId()));
-//                txtSkillCost.setText(String.valueOf(classWithSkills.skills.get(0).getCost()));
+                txtSkillName.setText(classWithSkills.skills.get(0).getNomSkill());
+                txtSkillId.setText(String.valueOf(classWithSkills.skills.get(0).getSkillId()));
+                txtSkillCost.setText(String.valueOf(classWithSkills.skills.get(0).getCost()));
                 txtSkillName.setText(String.valueOf(classWithSkills));
             }
         });
@@ -250,10 +253,23 @@ public class MainActivity extends AppCompatActivity {
         txtPersoName.setText(personnage.getName());
     }
 
-    public void updatePersonnageArmorName(int personnageId) {
+    /*public void updatePersonnageArmorName(int personnageId) {
         LiveData<PersonnageDetails> personnageDetailsLiveData = baseRepository.findPersonnageDetails(personnageId);
         observeEntityOnce(personnageDetailsLiveData, personnageDetails -> txtPersoArmorName.setText(personnageDetails.getArmor().getName()));
+    }*/
+
+    public void updatePersonnageArmorName(int personnageId) {
+        LiveData<PersonnageDetails> personnageDetailsLiveData = baseRepository.findPersonnageDetails(personnageId);
+        observeEntityOnce(personnageDetailsLiveData, personnageDetails -> {
+            if (personnageDetails != null && personnageDetails.getArmor() != null) {
+                txtPersoArmorName.setText(personnageDetails.getArmor().getName());
+            } else {
+                // Handle the null scenario, for example:
+                txtPersoArmorName.setText("No armor details available");
+            }
+        });
     }
+
 
     public void updateOwnedSkillName(int ownedSkillId) {
         LiveData<OwnedSkill> ownedSkillLiveData = baseRepository.findOwnedSkillById(ownedSkillId);
