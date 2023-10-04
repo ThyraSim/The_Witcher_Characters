@@ -11,9 +11,9 @@ public class Weapon {
     private int weaponId;
     private String name;
     private String damage;
-    private int hands;
+    private Integer hands;
 
-    public Weapon(int weaponId, String name, String damage, int hands) {
+    public Weapon(int weaponId, String name, String damage, Integer hands) {
         this.weaponId = weaponId;
         this.name = name;
         this.damage = damage;
@@ -44,11 +44,11 @@ public class Weapon {
         this.damage = damage;
     }
 
-    public int getHands() {
+    public Integer getHands() {
         return hands;
     }
 
-    public void setHands(int hands) {
+    public void setHands(Integer hands) {
         this.hands = hands;
     }
 }

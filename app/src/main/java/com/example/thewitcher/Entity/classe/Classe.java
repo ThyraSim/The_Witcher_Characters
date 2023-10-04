@@ -13,14 +13,14 @@ public class Classe {
     private String name;
     private String definingName;
     private String definingDescription;
-    private int vigor;
+    private Integer vigor;
     private String magicPerks;
 
     @Ignore
     public Classe() {
     }
 
-    public Classe(int classId, String name, String definingName, String definingDescription, int vigor, String magicPerks) {
+    public Classe(int classId, String name, String definingName, String definingDescription, Integer vigor, String magicPerks) {
         this.classId = classId;
         this.name = name;
         this.definingName = definingName;
@@ -53,11 +53,11 @@ public class Classe {
         this.definingDescription = definingDescription;
     }
 
-    public int getVigor() {
+    public Integer getVigor() {
         return vigor;
     }
 
-    public void setVigor(int vigor) {
+    public void setVigor(Integer vigor) {
         this.vigor = vigor;
     }
 

@@ -6,7 +6,6 @@ import com.example.thewitcher.Entity.OwnedGear;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.PersonnageDetails;
-import com.example.thewitcher.Entity.PersonnageSkillCrossRef;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
@@ -172,8 +171,6 @@ public class BaseRepository<T> {
     }
 
     public LiveData<PersonnageDetails> findPersonnageDetails(int searchId){ return personnageDao.findPersonnageDetails(searchId); }
-
-    public void insertPersonnagesSkills(List<PersonnageSkillCrossRef> personnageSkillCrossRefs){ personnageDao.insertPersonnageSkills(personnageSkillCrossRefs);}
 
     public void insertSkill(Skill skill) {
         skillDao.insert(skill);

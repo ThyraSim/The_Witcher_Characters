@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
 @Entity
 public class Personnage {
     @PrimaryKey(autoGenerate = true)
@@ -18,13 +16,12 @@ public class Personnage {
     private int classeId;
     private int weaponId;
     private int armorId;
-    private List<Skill> skills;
 
     @Ignore
     public Personnage() {
     }
 
-    public Personnage(int personnageId, String name, int age, int raceId, int classeId, int weaponId, int armorId, List<Skill> skills) {
+    public Personnage(int personnageId, String name, int age, int raceId, int classeId, int weaponId, int armorId) {
         this.personnageId = personnageId;
         this.name = name;
         this.age = age;
@@ -32,7 +29,6 @@ public class Personnage {
         this.classeId = classeId;
         this.weaponId = weaponId;
         this.armorId = armorId;
-        this.skills = skills;
     }
 
     public int getPersonnageId() {
@@ -89,13 +85,5 @@ public class Personnage {
 
     public void setArmorId(int armorId) {
         this.armorId = armorId;
-    }
-
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
     }
 }

@@ -10,9 +10,9 @@ public class Armor {
     @ColumnInfo(name = "id")
     private int armorId;
     private String name;
-    private int sp;
+    private Integer sp;
 
-    public Armor(int armorId, String name, int sp) {
+    public Armor(int armorId, String name, Integer sp) {
         this.armorId = armorId;
         this.name = name;
         this.sp = sp;
@@ -34,11 +34,11 @@ public class Armor {
         this.name = name;
     }
 
-    public int getSp() {
+    public Integer getSp() {
         return sp;
     }
 
-    public void setSp(int sp) {
+    public void setSp(Integer sp) {
         this.sp = sp;
     }
 }

@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Classe.class, Race.class, Weapon.class, Armor.class, OwnedGear.class, OwnedSkill.class,
-                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 17)
+                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 19)
 public abstract class WitcherRoomDatabase extends RoomDatabase {
     public abstract ClasseDao classeDao();
     public abstract ClasseSkillCrossRefDao classeSkillCrossRefDao();
