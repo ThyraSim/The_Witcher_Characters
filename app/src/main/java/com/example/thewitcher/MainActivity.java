@@ -33,8 +33,8 @@ import java.util.function.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Membres
     private TextView txtName, txtId, txtSkill, txtSkillName, txtSkillId, txtSkillCost;
-
     private BaseRepository baseRepository;
     private LiveData<List<Classe>> classeListLiveData;
     private LiveData<List<Race>> raceListLiveData;
@@ -47,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setWidgets();
         setListeners();
 
+        //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
 
+        //Instanciation des DAO
         ClasseDao classeDao = database.classeDao();
         ClasseSkillCrossRefDao classeSkillCrossRefDao = database.classeSkillCrossRefDao();
         RaceDao raceDao = database.raceDao();
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         PersonnageDao personnageDao = database.personnageDao();
         SkillDao skillDao = database.skillDao();
 
+        //Création du répository complet (tous les DAO)
         baseRepository = new BaseRepository(classeDao, classeSkillCrossRefDao, raceDao, weaponDao, armorDao, ownedGearDao, ownedSkillDao, personnageDao, skillDao);
 
         Classe classe = new Classe(1, "Bard", "Busking (EMP)", "A Bard is a wonderful thing to have around", 0, "None");
@@ -70,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         Skill skill = new Skill(1, "Perception", 2);
 //        new InsertEntityAsyncTask<Skill>(skillDao).execute(skill);
 
+        //Récupération des classes dans la BD
         classeListLiveData = new BaseRepository<Classe>(classeDao).findAll();
+        //Modification de l'affichage lors de changments
         ObserveEntityListAsyncTask<Classe> observeClasseListAsyncTask = new ObserveEntityListAsyncTask<>(classeListLiveData, new Consumer<Classe>() {
             @Override
             public void accept(Classe classe) {
@@ -97,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
 //        Converters converters = new Converters(database, this);
 //        new InsertEntityAsyncTask<ClasseSkillCrossRef>(classeSkillCrossRefDao).execute(converters.mapToClasseSkillCrossRef(classWithSkills));
 
+        //Récupération des skills dans la BD
         LiveData<List<Skill>> skillsFromClassLiveData = baseRepository.findSkillsByClassId(1);
+        //Modification de l'affichage des skills selon les changements
         ObserveEntityListAsyncTask<Skill> skillObserveEntityListAsyncTask = new ObserveEntityListAsyncTask<>(skillsFromClassLiveData, new Consumer<Skill>() {
             @Override
             public void accept(Skill skills) {
@@ -111,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Membres UI
     private void setWidgets(){
         txtName = findViewById(R.id.txtName);
         txtId = findViewById(R.id.txtId);
@@ -120,9 +129,16 @@ public class MainActivity extends AppCompatActivity {
         txtSkillCost = findViewById(R.id.txtSkillCost);
     }
 
+    //Fonction pour créer n'importe quelle entité
+
+    /**
+     *
+     * @param <T> mettre la classe de l'objet à insérer
+     */
     private class InsertEntityAsyncTask<T> extends AsyncTask<T, Void, Void>{
         private BaseRepository<T> nbaseRepository;
 
+        //myDao = DAO de l'objet à insérer
         public InsertEntityAsyncTask(BaseDao myDao){
             this.nbaseRepository = new BaseRepository<>(myDao);
         }
@@ -147,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Modifier l'affichage des attributs de classes
     private void updateTextViewsClasse(Classe classe) {
         runOnUiThread(new Runnable() {
             @Override
@@ -157,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Modifier l'affichage des attributs de skills
     private void updateTextViewsSkill(Skill skill) {
         runOnUiThread(new Runnable() {
             @Override
@@ -168,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Modifier l'affichage des attributs de ClasseWithSkills
     private void updateTextViewsClassWithSkill(ClassWithSkills classWithSkills) {
         runOnUiThread(new Runnable() {
             @Override
@@ -180,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Fonction pour observer les changements dans les livedata en background
     private class ObserveEntityListAsyncTask<T> extends AsyncTask<Void, Void, Void> {
         private LiveData<List<T>> entityListLiveData;
         private Consumer<T> entityConsumer;
