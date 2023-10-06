@@ -1,10 +1,6 @@
 package com.example.thewitcher;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -15,9 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 //ici va etre la liste des personnage lier au compte

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.thewitcher.Entity.OwnedGear;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.PersonnageDetails;
@@ -17,8 +16,8 @@ import com.example.thewitcher.Entity.classe.ClassWithSkills;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.race.Race;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
+import com.example.thewitcher.converters.Converters;
 import com.example.thewitcher.dao.BaseDao;
-import com.example.thewitcher.dao.OwnedGearDao;
 import com.example.thewitcher.dao.OwnedSkillDao;
 import com.example.thewitcher.dao.PersonnageDao;
 import com.example.thewitcher.dao.SkillDao;
@@ -28,8 +27,6 @@ import com.example.thewitcher.dao.gear.ArmorDao;
 import com.example.thewitcher.dao.gear.WeaponDao;
 import com.example.thewitcher.dao.race.RaceDao;
 import com.example.thewitcher.repository.BaseRepository;
-import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
-import com.example.thewitcher.converters.Converters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private BaseRepository baseRepository;
     private LiveData<List<Classe>> classeListLiveData;
     private LiveData<List<Race>> raceListLiveData;
-    private LiveData<List<OwnedGear>> ownedGearListLiveData;
     private LiveData<List<OwnedSkill>> ownedSkillListLiveData;
     private LiveData<List<Personnage>> personnageListLiveData;
     private LiveData<List<Skill>> skillListLiveData;
@@ -65,22 +61,22 @@ public class MainActivity extends AppCompatActivity {
         RaceDao raceDao = database.raceDao();
         WeaponDao weaponDao = database.weaponDao();
         ArmorDao armorDao = database.armorDao();
-        OwnedGearDao ownedGearDao = database.ownedGearDao();
         OwnedSkillDao ownedSkillDao = database.ownedSkillDao();
         PersonnageDao personnageDao = database.personnageDao();
         SkillDao skillDao = database.skillDao();
 
         //Création du répository complet (tous les DAO)
-        baseRepository = new BaseRepository(classeDao, classeSkillCrossRefDao, raceDao, weaponDao, armorDao, ownedGearDao, ownedSkillDao, personnageDao, skillDao);
+        baseRepository = new BaseRepository(classeDao, classeSkillCrossRefDao, raceDao, weaponDao, armorDao, ownedSkillDao, personnageDao, skillDao);
 
         Classe classe = new Classe(1, "Bard", "Busking (EMP)", "A Bard is a wonderful thing to have around", 0, "None");
 
-        new InsertEntityAsyncTask<Classe>(classeDao).execute(classe);
+//        new InsertEntityAsyncTask<Classe>(classeDao).execute(classe);
         Skill skill = new Skill(1, "Perception", 2);
-        new InsertEntityAsyncTask<Skill>(skillDao).execute(skill);
+//        new InsertEntityAsyncTask<Skill>(skillDao).execute(skill);
 
         //Récupération des classes dans la BD
         classeListLiveData = new BaseRepository<Classe>(classeDao).findAll();
+        
         //Modification de l'affichage lors de changments
         ObserveEntityListAsyncTask<Classe> observeClasseListAsyncTask = new ObserveEntityListAsyncTask<>(classeListLiveData, new Consumer<Classe>() {
             @Override
@@ -106,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         classWithSkills.skills = skills;
 
         Converters converters = new Converters(database, this);
-        new InsertEntityAsyncTask<ClasseSkillCrossRef>(classeSkillCrossRefDao).execute(converters.mapToClasseSkillCrossRef(classWithSkills));
+//        new InsertEntityAsyncTask<ClasseSkillCrossRef>(classeSkillCrossRefDao).execute(converters.mapToClasseSkillCrossRef(classWithSkills));
 
         //Récupération des skills dans la BD
         LiveData<List<Skill>> skillsFromClassLiveData = baseRepository.findSkillsByClassId(1);
@@ -119,20 +115,20 @@ public class MainActivity extends AppCompatActivity {
         });
         skillObserveEntityListAsyncTask.execute();
 
-        Personnage nouvPerso = new Personnage(1, "Gerorge", 20, 1, 1, 1, 1);
-        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
-       new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(1, 27, 1, 1));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(2, 12, 1, 3));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(3, 35, 1, 5));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(4, 7, 1, 2));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(5, 42, 1, 4));
+//        Personnage nouvPerso = new Personnage(1, "Gerorge", 20, 1, 1, 1, 1);
+//        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(1, 27, 1, 1));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(2, 12, 1, 3));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(3, 35, 1, 5));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(4, 7, 1, 2));
+//        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(5, 42, 1, 4));
 
-        int personnageId = 1;
-        int ownedSkillId = 1;
-
-        updatePersonnageName(personnageId);
-        updatePersonnageArmorName(personnageId);
-        updateOwnedSkillName(ownedSkillId);
+//        int personnageId = 1;
+//        int ownedSkillId = 1;
+//
+//        updatePersonnageName(personnageId);
+//        updatePersonnageArmorName(personnageId);
+//        updateOwnedSkillName(ownedSkillId);
     }
     private void setListeners(){
 
