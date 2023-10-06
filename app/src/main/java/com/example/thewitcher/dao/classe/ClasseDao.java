@@ -17,4 +17,7 @@ public interface ClasseDao extends BaseDao<Classe> {
     @Override
     @Query("SELECT * FROM classe")
     LiveData<List<Classe>> findAll();
+
+    @Query("SELECT COUNT(*) FROM classe")
+    int count();
 }

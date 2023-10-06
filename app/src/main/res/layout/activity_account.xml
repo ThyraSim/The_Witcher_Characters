@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AccountActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listPersos"
         android:layout_width="409dp"
         android:layout_height="729dp"

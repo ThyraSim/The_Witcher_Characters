@@ -31,6 +31,16 @@ public class Personnage {
         this.armorId = armorId;
     }
 
+    @Ignore
+    public Personnage(String name, int age, int raceId, int classeId, int weaponId, int armorId) {
+        this.name = name;
+        this.age = age;
+        this.raceId = raceId;
+        this.classeId = classeId;
+        this.weaponId = weaponId;
+        this.armorId = armorId;
+    }
+
     public int getPersonnageId() {
         return personnageId;
     }

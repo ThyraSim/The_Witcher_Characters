@@ -23,12 +23,11 @@ import com.example.thewitcher.dao.gear.ArmorDao;
 import com.example.thewitcher.dao.gear.WeaponDao;
 import com.example.thewitcher.dao.race.RaceDao;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Classe.class, Race.class, Weapon.class, Armor.class, OwnedSkill.class,
-                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 22)
+                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 28)
 public abstract class WitcherRoomDatabase extends RoomDatabase {
     public abstract ClasseDao classeDao();
     public abstract ClasseSkillCrossRefDao classeSkillCrossRefDao();
@@ -60,9 +59,10 @@ public abstract class WitcherRoomDatabase extends RoomDatabase {
     }
 
     private static void createEntities(WitcherRoomDatabase INSTANCE) {
-        databaseWriteExecutor.submit(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
+        databaseWriteExecutor.submit(() -> {
+            // Check if the database is empty
+            if (INSTANCE.classeDao().count() == 0) {
+                // Insert entities into the database
                 for (Classe classe : BaseEntities.getClassesToInsert()) {
                     INSTANCE.classeDao().insert(classe);
                 }
@@ -81,8 +81,15 @@ public abstract class WitcherRoomDatabase extends RoomDatabase {
                 for(Armor armor : BaseEntities.getArmorsToInsert()){
                     INSTANCE.armorDao().insert(armor);
                 }
-                return null;
+                for(Personnage personnage : BaseEntities.getPersonnagesToInsert()){
+                    INSTANCE.personnageDao().insert(personnage);
+                }
+                for(OwnedSkill ownedSkill : BaseEntities.getOwnedSkillsToInsert()){
+                    INSTANCE.ownedSkillDao().insert(ownedSkill);
+                }
             }
+            return null;
         });
     }
+
 }

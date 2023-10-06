@@ -3,55 +3,86 @@ package com.example.thewitcher;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
+import com.example.thewitcher.dao.OwnedSkillDao;
+import com.example.thewitcher.dao.PersonnageDao;
+import com.example.thewitcher.dao.SkillDao;
+import com.example.thewitcher.dao.classe.ClasseDao;
+import com.example.thewitcher.dao.classe.ClasseSkillCrossRefDao;
+import com.example.thewitcher.dao.gear.ArmorDao;
+import com.example.thewitcher.dao.gear.WeaponDao;
+import com.example.thewitcher.dao.race.RaceDao;
+import com.example.thewitcher.repository.BaseRepository;
+import com.example.thewitcher.viewModels.PersonnageViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //ici va etre la liste des personnage lier au compte
 public class AccountActivity extends AppCompatActivity {
-    private ListView listPersos;
-    private ArrayList<AccountPerso> persosArray = new ArrayList<>();
+    private PersonnageViewModel viewModel;
     private personnageAdapter adapter;
+    private List<PersonnageDetails> persosArray = new ArrayList<>();
+    private BaseRepository baseRepository;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
+        //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
-        // 1: Retrieve the email sent by MainActivity
-        String email = getIntent().getStringExtra("email");
-        // 2: Display the email in tvHello
-        listPersos = findViewById(R.id.listPersos);
 
-        // Populating the postsArray
-        persosArray.add(new AccountPerso("Post 1", "Ceci est une image de Aorus Chibi", R.drawable.aorus_chibi3));
-        persosArray.add(new AccountPerso("Post 2", "Ceci est une image d'une potion d'arcane", R.drawable.raid_shadow_arcane_potion));
-        persosArray.add(new AccountPerso("Post 3", "Ceci est une image d'une potion de force'", R.drawable.raid_shadow_force_potion));
-        persosArray.add(new AccountPerso("Post 4", "Ceci est une image d'une moyenne potion d'arcane", R.drawable.raid_shadow_medium_arcane_potion));
-        persosArray.add(new AccountPerso("Post 5", "Ceci est une image de silver", R.drawable.silver_raid_shadow));
+        //Instanciation des DAO
+        ClasseDao classeDao = database.classeDao();
+        ClasseSkillCrossRefDao classeSkillCrossRefDao = database.classeSkillCrossRefDao();
+        RaceDao raceDao = database.raceDao();
+        WeaponDao weaponDao = database.weaponDao();
+        ArmorDao armorDao = database.armorDao();
+        OwnedSkillDao ownedSkillDao = database.ownedSkillDao();
+        PersonnageDao personnageDao = database.personnageDao();
+        SkillDao skillDao = database.skillDao();
 
-        adapter = new personnageAdapter(this, R.layout.account_personnage, persosArray);
-        listPersos.setAdapter(adapter);
+        //Création du répository complet (tous les DAO)
+        baseRepository = new BaseRepository(getApplication());
 
-        listPersos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        RecyclerView listPersos = findViewById(R.id.listPersos);
+
+        listPersos.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new personnageAdapter(this, persosArray, new personnageAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AccountPerso clickedPost = persosArray.get(position);
+            public void onItemClick(int position) {
+                PersonnageDetails clickedPost = persosArray.get(position);
                 Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
-                intent.putExtra("titre", clickedPost.getTitre());
+                intent.putExtra("titre", clickedPost.getPersonnage().getName());
                 startActivity(intent);
             }
+        });
+        listPersos.setAdapter(adapter);
+
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PersonnageViewModel.class);
+
+        // Observe LiveData
+        viewModel.getAllPersonnageDetails().observe(this, personnageDetails -> {
+            Log.d("DEBUG", "Observer received " + personnageDetails.size() + " items");
+            persosArray = personnageDetails;
+            adapter.updateData((ArrayList<PersonnageDetails>) personnageDetails);
+            adapter.notifyDataSetChanged();
         });
 
         registerForContextMenu(listPersos);
@@ -82,5 +113,7 @@ public class AccountActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.list_popup_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
+
+
 }
 

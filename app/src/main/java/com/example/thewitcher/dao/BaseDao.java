@@ -13,6 +13,12 @@ public interface BaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(T entity);
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAll(T... entities);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAll(List<T> entities);
+
     @Delete
     void delete(T entity);
 

@@ -1,5 +1,7 @@
 package com.example.thewitcher.connection;
 
+import com.example.thewitcher.Entity.OwnedSkill;
+import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
@@ -298,5 +300,45 @@ public class BaseEntities {
         armors.add(new Armor(9, "Hindarsfjall Heavy Armor", 25));
         armors.add(new Armor(10, "Nilfgaardian Plate Armor", 30));
         return armors;
+    }
+
+    public static List<Personnage> getPersonnagesToInsert(){
+        List<Personnage> personnages = new ArrayList<>();
+        personnages.add(new Personnage("George", 20, 1, 1, 1, 1));
+        personnages.add(new Personnage("Paulo", 22, 3, 7, 18, 8));
+        personnages.add(new Personnage("Yemel", 27, 4, 6, 16, 5));
+        personnages.add(new Personnage("Zechiel", 322, 2, 3, 11, 6));
+        personnages.add(new Personnage("Remereim", 19, 1, 4, 4, 4));
+        return personnages;
+    }
+
+    public static List<OwnedSkill> getOwnedSkillsToInsert(){
+        List<OwnedSkill> ownedSkills = new ArrayList<>();
+        ownedSkills.add(new OwnedSkill(27, 1, 1));
+        ownedSkills.add(new OwnedSkill(12, 1, 3));
+        ownedSkills.add(new OwnedSkill(35, 1, 5));
+        ownedSkills.add(new OwnedSkill(7, 1, 2));
+        ownedSkills.add(new OwnedSkill(42, 1, 4));
+        ownedSkills.add(new OwnedSkill(14, 2, 2));
+        ownedSkills.add(new OwnedSkill(3, 2, 4));
+        ownedSkills.add(new OwnedSkill(47, 2, 1));
+        ownedSkills.add(new OwnedSkill(19, 2, 5));
+        ownedSkills.add(new OwnedSkill(25, 2, 3));
+        ownedSkills.add(new OwnedSkill(9, 3, 2));
+        ownedSkills.add(new OwnedSkill(50, 3, 1));
+        ownedSkills.add(new OwnedSkill(11, 3, 5));
+        ownedSkills.add(new OwnedSkill(38, 3, 4));
+        ownedSkills.add(new OwnedSkill(29, 3, 3));
+        ownedSkills.add(new OwnedSkill(4, 4, 5));
+        ownedSkills.add(new OwnedSkill(17, 4, 1));
+        ownedSkills.add(new OwnedSkill(31, 4, 2));
+        ownedSkills.add(new OwnedSkill(8, 4, 3));
+        ownedSkills.add(new OwnedSkill(44, 4, 4));
+        ownedSkills.add(new OwnedSkill(23, 5, 5));
+        ownedSkills.add(new OwnedSkill(15, 5, 1));
+        ownedSkills.add(new OwnedSkill(39, 5, 4));
+        ownedSkills.add(new OwnedSkill(10, 5, 2));
+        ownedSkills.add(new OwnedSkill(49, 5, 3));
+        return ownedSkills;
     }
 }

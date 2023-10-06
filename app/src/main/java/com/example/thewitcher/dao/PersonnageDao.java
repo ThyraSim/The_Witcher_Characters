@@ -30,6 +30,18 @@ public interface PersonnageDao extends BaseDao<Personnage> {
             "WHERE personnage.id = :searchId")
     LiveData<PersonnageDetails> findPersonnageDetails(int searchId);
 
+    @Query("SELECT personnage.*, " +
+            "race.id AS race_id, race.name AS race_name, " +
+            "classe.id AS classe_id, classe.name AS classe_name, " +
+            "weapon.id AS weapon_id, weapon.name AS weapon_name, " +
+            "armor.id AS armor_id, armor.name AS armor_name " +
+            "FROM personnage " +
+            "JOIN race ON personnage.raceId = race.id " +
+            "JOIN classe ON personnage.classeId = classe.id " +
+            "JOIN weapon ON personnage.weaponId = weapon.id " +
+            "JOIN armor ON personnage.armorId = armor.id")
+    LiveData<List<PersonnageDetails>> findAllPersonnageDetails();
+
 
     @Query("SELECT * FROM personnage")
     LiveData<List<Personnage>> findAll();

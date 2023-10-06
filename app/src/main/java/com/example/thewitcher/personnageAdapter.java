@@ -1,67 +1,85 @@
 package com.example.thewitcher;
 
 import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.example.thewitcher.Entity.PersonnageDetails;
 
-public class personnageAdapter extends ArrayAdapter<AccountPerso> {
-    private Context mContext;
-    private int resource;
-    private ArrayList<AccountPerso> values;
-    public personnageAdapter(Context mContext, int resource, ArrayList<AccountPerso> values) {
-        super(mContext, resource, values);
+import java.util.List;
+
+public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.PersonnageViewHolder> {
+    private final Context mContext;
+    private List<PersonnageDetails> values;
+
+    private final OnItemClickListener listener;
+
+    public personnageAdapter(Context mContext, List<PersonnageDetails> values, OnItemClickListener listener) {
         this.mContext = mContext;
-        this.resource = resource;
         this.values = values;
+        this.listener = listener;
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        AccountPerso aPerso = values.get(position);
-        View itemView = LayoutInflater.from(mContext).inflate(resource, parent, false);
+    public PersonnageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_personnage, parent, false);
+        return new PersonnageViewHolder(itemView);
+    }
 
-        TextView tvTitre = itemView.findViewById(R.id.tvPersoName);
-        TextView tvDescription = itemView.findViewById(R.id.tvDescription);
-        ImageView imagePost = itemView.findViewById(R.id.imagePerso);
-        ImageView imageShowPopup = itemView.findViewById(R.id.imageShowPopup);
+    @Override
+    public void onBindViewHolder(PersonnageViewHolder holder, int position) {
+        PersonnageDetails personnageDetails = values.get(position);
+        Log.d("DEBUG", "Binding item at position " + position + ": " + personnageDetails.getPersonnage().getName());
+        holder.bind(personnageDetails);
+    }
 
-        tvTitre.setText(aPerso.getTitre());
-        tvDescription.setText(aPerso.getDescription());
-        imagePost.setImageResource(aPerso.getImage());
+    @Override
+    public int getItemCount() {
+        int itemCount = values.size();
+        Log.d("DEBUG", "Item count is: " + itemCount);
+        return itemCount;
+    }
 
-        imageShowPopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(mContext, imageShowPopup);
-                popupMenu.getMenuInflater().inflate(R.menu.list_popup_menu, popupMenu.getMenu());
+    public class PersonnageViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitre, tvDescription;
+        ImageView imagePost, imageShowPopup;
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.itemShow) {
-                            Intent intent = new Intent(mContext, PersonnageActivity.class);
-                            intent.putExtra("titre", aPerso.getTitre());
-                            mContext.startActivity(intent);
-                        } else if (item.getItemId() == R.id.itemDelete) {
-                            values.remove(position);
-                            notifyDataSetChanged();
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
-        return itemView;
+        public PersonnageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvTitre = itemView.findViewById(R.id.tvPersoName);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            imagePost = itemView.findViewById(R.id.imagePerso);
+            imageShowPopup = itemView.findViewById(R.id.imageShowPopup);
+
+            // Use the listener defined in your adapter
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(position);
+                }
+            });
+        }
+
+        public void bind(PersonnageDetails personnageDetails) {
+            tvTitre.setText(personnageDetails.getPersonnage().getName());
+            tvDescription.setText(personnageDetails.getClasse().getName());
+            imagePost.setImageResource(R.drawable.aorus_chibi3);
+        }
+    }
+
+    public void updateData(List<PersonnageDetails> newValues){
+        this.values = newValues;
+        notifyDataSetChanged();
     }
 }
