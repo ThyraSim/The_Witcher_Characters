@@ -17,14 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
-import com.example.thewitcher.dao.OwnedSkillDao;
-import com.example.thewitcher.dao.PersonnageDao;
-import com.example.thewitcher.dao.SkillDao;
-import com.example.thewitcher.dao.classe.ClasseDao;
-import com.example.thewitcher.dao.classe.ClasseSkillCrossRefDao;
-import com.example.thewitcher.dao.gear.ArmorDao;
-import com.example.thewitcher.dao.gear.WeaponDao;
-import com.example.thewitcher.dao.race.RaceDao;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
 
@@ -47,28 +39,22 @@ public class AccountActivity extends AppCompatActivity {
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
 
-        //Instanciation des DAO
-        ClasseDao classeDao = database.classeDao();
-        ClasseSkillCrossRefDao classeSkillCrossRefDao = database.classeSkillCrossRefDao();
-        RaceDao raceDao = database.raceDao();
-        WeaponDao weaponDao = database.weaponDao();
-        ArmorDao armorDao = database.armorDao();
-        OwnedSkillDao ownedSkillDao = database.ownedSkillDao();
-        PersonnageDao personnageDao = database.personnageDao();
-        SkillDao skillDao = database.skillDao();
-
         //Création du répository complet (tous les DAO)
         baseRepository = new BaseRepository(getApplication());
 
         RecyclerView listPersos = findViewById(R.id.listPersos);
 
         listPersos.setLayoutManager(new LinearLayoutManager(this));
+
+        //Send data to adapter
         adapter = new personnageAdapter(this, persosArray, new personnageAdapter.OnItemClickListener() {
+            //Create onClickListener and send data to PersonnageActivity
             @Override
             public void onItemClick(int position) {
                 PersonnageDetails clickedPost = persosArray.get(position);
                 Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
-                intent.putExtra("titre", clickedPost.getPersonnage().getName());
+                Log.d("DEBUG", "Clicked on item at position " + position + ": " + clickedPost.getPersonnage().getPersonnageId());
+                intent.putExtra("persoId", clickedPost.getPersonnage().getPersonnageId());
                 startActivity(intent);
             }
         });
