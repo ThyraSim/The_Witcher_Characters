@@ -35,6 +35,13 @@ public class OwnedSkill {
         this.value = value;
     }
 
+    @Ignore
+    public OwnedSkill(int skillId, int personnageId, int value) {
+        this.skillId = skillId;
+        this.personnageId = personnageId;
+        this.value = value;
+    }
+
     public int getSkillId() {
         return skillId;
     }

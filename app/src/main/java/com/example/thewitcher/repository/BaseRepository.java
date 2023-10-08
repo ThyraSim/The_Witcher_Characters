@@ -1,8 +1,9 @@
 package com.example.thewitcher.repository;
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 
-import com.example.thewitcher.Entity.OwnedGear;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.PersonnageDetails;
@@ -10,8 +11,8 @@ import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
 import com.example.thewitcher.Entity.race.Race;
+import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.dao.BaseDao;
-import com.example.thewitcher.dao.OwnedGearDao;
 import com.example.thewitcher.dao.OwnedSkillDao;
 import com.example.thewitcher.dao.PersonnageDao;
 import com.example.thewitcher.dao.SkillDao;
@@ -31,21 +32,21 @@ public class BaseRepository<T> {
     private RaceDao raceDao;
     private WeaponDao weaponDao;
     private ArmorDao armorDao;
-    private OwnedGearDao ownedGearDao;
     private OwnedSkillDao ownedSkillDao;
     private PersonnageDao personnageDao;
     private SkillDao skillDao;
+    private WitcherRoomDatabase database;
 
-    public BaseRepository(ClasseDao classeDao, ClasseSkillCrossRefDao classeSkillCrossRefDao, RaceDao raceDao, WeaponDao weaponDao, ArmorDao armorDao, OwnedGearDao ownedGearDao, OwnedSkillDao ownedSkillDao, PersonnageDao personnageDao, SkillDao skillDao) {
-        this.classeDao = classeDao;
-        this.classeSkillCrossRefDao = classeSkillCrossRefDao;
-        this.raceDao = raceDao;
-        this.weaponDao = weaponDao;
-        this.armorDao = armorDao;
-        this.ownedGearDao = ownedGearDao;
-        this.ownedSkillDao = ownedSkillDao;
-        this.personnageDao = personnageDao;
-        this.skillDao = skillDao;
+    public BaseRepository(Application application) {
+        database = WitcherRoomDatabase.getDatabase(application);
+        this.classeDao = database.classeDao();
+        this.classeSkillCrossRefDao = database.classeSkillCrossRefDao();
+        this.raceDao = database.raceDao();
+        this.weaponDao = database.weaponDao();
+        this.armorDao = database.armorDao();
+        this.ownedSkillDao = database.ownedSkillDao();
+        this.personnageDao = database.personnageDao();
+        this.skillDao = database.skillDao();
     }
 
     public BaseRepository(BaseDao myDao){
@@ -54,6 +55,10 @@ public class BaseRepository<T> {
 
     public void insertEntity(T entity) {
         myDao.insert(entity);
+    }
+
+    public void insertAllEntities(T... entities) {
+        myDao.insertAll(entities);
     }
 
     public void updateEntity(T entity) {
@@ -110,26 +115,6 @@ public class BaseRepository<T> {
         return raceDao.findAll();
     }
 
-    public void insertOwnedGear(OwnedGear ownedGear) {
-        ownedGearDao.insert(ownedGear);
-    }
-
-    public void deleteOwnedGear(OwnedGear ownedGear) {
-        ownedGearDao.delete(ownedGear);
-    }
-
-    public void updateOwnedGear(OwnedGear ownedGear) {
-        ownedGearDao.update(ownedGear);
-    }
-
-    public LiveData<OwnedGear> findOwnedGearById(int id) {
-        return ownedGearDao.findById(id);
-    }
-
-    public LiveData<List<OwnedGear>> findAllOwnedGear() {
-        return ownedGearDao.findAll();
-    }
-
     public void insertOwnedSkill(OwnedSkill ownedSkill) {
         ownedSkillDao.insert(ownedSkill);
     }
@@ -171,6 +156,7 @@ public class BaseRepository<T> {
     }
 
     public LiveData<PersonnageDetails> findPersonnageDetails(int searchId){ return personnageDao.findPersonnageDetails(searchId); }
+    public LiveData<List<PersonnageDetails>> findAllPersonnageDetails(){ return personnageDao.findAllPersonnageDetails(); }
 
     public void insertSkill(Skill skill) {
         skillDao.insert(skill);
