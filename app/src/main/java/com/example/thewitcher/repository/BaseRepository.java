@@ -135,6 +135,10 @@ public class BaseRepository<T> {
         return ownedSkillDao.findAll();
     }
 
+    public LiveData<List<OwnedSkill>> findOwnedSkillByPersonnageId(int personnageId) {
+        return ownedSkillDao.findSkillsForPersonnage(personnageId);
+    }
+
     public void insertPersonnage(Personnage personnage) {
         personnageDao.insert(personnage);
     }

@@ -4,19 +4,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
+import com.example.thewitcher.Entity.gear.Armor;
+import com.example.thewitcher.Entity.gear.Weapon;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
@@ -49,12 +47,12 @@ private PersonnageViewModel viewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnage);
-        ImageView imageView = findViewById(R.id.imageView);
-        TextView tvClass = findViewById(R.id.tvClass);
-        TextView tvRace = findViewById(R.id.tvRace);
-        ScrollView skillsScrollView = findViewById(R.id.svSkill);
-        ScrollView gearScrollView = findViewById(R.id.svGear);
-        ScrollView backgroundScrollView = findViewById(R.id.svBackground);
+        imageView = findViewById(R.id.imageView);
+        tvClass = findViewById(R.id.tvClass);
+        tvRace = findViewById(R.id.tvRace);
+        skillScrollView = findViewById(R.id.svSkill);
+        gearScrollView = findViewById(R.id.svGear);
+        backgroundScrollView = findViewById(R.id.svBackground);
         
 //... et ainsi de suite pour toutes les autres vues
 
@@ -65,16 +63,47 @@ private PersonnageViewModel viewModel;
         baseRepository = new BaseRepository(getApplication());
 
         // Initialisation du viewModel
-        //viewModel = new PersonnageViewModel();
+        viewModel = new PersonnageViewModel(getApplication());
+
+        int id = getIntent().getIntExtra("persoId", 0);
 
         // Récupérer et afficher les détails du personnage
-        loadCharacterDetails();
-
-
-
+        loadCharacterDetails(id);
     }
 
-    private void loadCharacterDetails() {
-
+    private void loadCharacterDetails(int id) {
+        LiveData<PersonnageDetails> personnageDetails = viewModel.getPersonnageDetailsById(id);
+        personnageDetails.observe(this, persoDetails -> {
+            // Afficher les détails du personnage
+            tvClass.setText(persoDetails.getClasse().getName());
+            // Afficher l'armure
+            Armor armor = persoDetails.getArmor();
+            TextView tvArmor = new TextView(this);
+            tvArmor.setText(armor.getName());
+//            gearScrollView.addView(tvArmor);
+            //Afficher l'arme
+            Weapon weapon = persoDetails.getWeapon();
+            TextView tvWeapon = new TextView(this);
+            tvWeapon.setText(weapon.getName());
+//            gearScrollView.addView(tvWeapon);
+            // Afficher l'histoire
+//            TextView tvBackground = new TextView(this);
+//            tvBackground.setText(persoDetails.getPersonnage().getBackground());
+//            backgroundLayout.addView(tvBackground);
+        });
+        //Afficher les skills
+        LiveData<List<OwnedSkill>> oSkills = viewModel.getPersonnageSkillsById(id);
+        oSkills.observe(this, ownedSkills -> {
+            for (OwnedSkill oSkill : ownedSkills) {
+                TextView tvSkill = new TextView(this);
+                //Vérification skillid de oSkill
+                Log.d("DEBUG", "Skill id: " + oSkill.getSkillId());
+                LiveData<Skill> skill = baseRepository.findSkillById(oSkill.getSkillId());
+                skill.observe(this, skill1 -> {
+                    tvSkill.setText(skill1.getNomSkill());
+                });
+//                skillScrollView.addView(tvSkill);
+            }
+        });
     }
 }

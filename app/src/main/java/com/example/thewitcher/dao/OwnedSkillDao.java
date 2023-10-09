@@ -17,5 +17,5 @@ public interface OwnedSkillDao extends BaseDao<OwnedSkill> {
     LiveData<List<OwnedSkill>> findAll();
 
     @Query("SELECT * FROM OwnedSkill WHERE personnage_id = :personnageId")
-    List<OwnedSkill> findSkillsForPersonnage(int personnageId);
+    LiveData<List<OwnedSkill>> findSkillsForPersonnage(int personnageId);
 }

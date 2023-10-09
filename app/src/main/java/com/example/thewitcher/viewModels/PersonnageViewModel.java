@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.repository.BaseRepository;
 
@@ -20,8 +21,19 @@ public class PersonnageViewModel extends AndroidViewModel {
         allPersonnageDetails = repository.findAllPersonnageDetails();
     }
 
+    //Renvoie tous les personnages
     public LiveData<List<PersonnageDetails>> getAllPersonnageDetails() {
         return allPersonnageDetails;
+    }
+
+    //Renvoie un personnage par son id
+    public LiveData<PersonnageDetails> getPersonnageDetailsById(int id) {
+        return repository.findPersonnageDetails(id);
+    }
+
+    //Renvoie les skills d'un personnage par son id
+    public LiveData<List<OwnedSkill>> getPersonnageSkillsById(int id) {
+        return repository.findOwnedSkillByPersonnageId(id);
     }
 }
 

@@ -99,7 +99,5 @@ public class AccountActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.list_popup_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
-
-
 }
 
