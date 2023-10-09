@@ -16,12 +16,13 @@ public class Personnage {
     private int classeId;
     private int weaponId;
     private int armorId;
+    private String background;
 
     @Ignore
     public Personnage() {
     }
 
-    public Personnage(int personnageId, String name, int age, int raceId, int classeId, int weaponId, int armorId) {
+    public Personnage(int personnageId, String name, int age, int raceId, int classeId, int weaponId, int armorId, String background) {
         this.personnageId = personnageId;
         this.name = name;
         this.age = age;
@@ -29,16 +30,18 @@ public class Personnage {
         this.classeId = classeId;
         this.weaponId = weaponId;
         this.armorId = armorId;
+        this.background = background;
     }
 
     @Ignore
-    public Personnage(String name, int age, int raceId, int classeId, int weaponId, int armorId) {
+    public Personnage(String name, int age, int raceId, int classeId, int weaponId, int armorId, String background) {
         this.name = name;
         this.age = age;
         this.raceId = raceId;
         this.classeId = classeId;
         this.weaponId = weaponId;
         this.armorId = armorId;
+        this.background = background;
     }
 
     public int getPersonnageId() {
@@ -95,5 +98,13 @@ public class Personnage {
 
     public void setArmorId(int armorId) {
         this.armorId = armorId;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
     }
 }

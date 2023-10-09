@@ -304,16 +304,16 @@ public class BaseEntities {
 
     public static List<Personnage> getPersonnagesToInsert(){
         List<Personnage> personnages = new ArrayList<>();
-        personnages.add(new Personnage("George", 20, 1, 1, 1, 1));
-        personnages.add(new Personnage("Paulo", 22, 3, 7, 18, 8));
-        personnages.add(new Personnage("Yemel", 27, 4, 6, 16, 5));
-        personnages.add(new Personnage("Zechiel", 322, 2, 3, 11, 6));
-        personnages.add(new Personnage("Remereim", 19, 1, 4, 4, 4));
-        personnages.add(new Personnage("Gerald", 20, 1, 1, 1, 1));
-        personnages.add(new Personnage("Yennefer", 22, 3, 7, 18, 8));
-        personnages.add(new Personnage("Triss", 27, 4, 6, 16, 5));
-        personnages.add(new Personnage("Ciri", 322, 2, 3, 11, 6));
-        personnages.add(new Personnage("Vesemir", 19, 1, 4, 4, 4));
+        personnages.add(new Personnage("George", 20, 1, 1, 1, 1, ""));
+        personnages.add(new Personnage("Paulo", 22, 3, 7, 18, 8, ""));
+        personnages.add(new Personnage("Yemel", 27, 4, 6, 16, 5, ""));
+        personnages.add(new Personnage("Zechiel", 322, 2, 3, 11, 6, ""));
+        personnages.add(new Personnage("Remereim", 19, 1, 4, 4, 4, ""));
+        personnages.add(new Personnage("Gerald", 20, 1, 1, 1, 1, ""));
+        personnages.add(new Personnage("Yennefer", 22, 3, 7, 18, 8, ""));
+        personnages.add(new Personnage("Triss", 27, 4, 6, 16, 5, ""));
+        personnages.add(new Personnage("Ciri", 322, 2, 3, 11, 6, ""));
+        personnages.add(new Personnage("Vesemir", 19, 1, 4, 4, 4, ""));
         return personnages;
     }
 

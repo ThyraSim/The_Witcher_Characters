@@ -24,7 +24,6 @@ import com.example.thewitcher.dao.gear.ArmorDao;
 import com.example.thewitcher.dao.gear.WeaponDao;
 import com.example.thewitcher.dao.race.RaceDao;
 import com.example.thewitcher.repository.BaseRepository;
-import com.example.thewitcher.utils.InsertEntityAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,14 +111,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //        skillObserveEntityListAsyncTask.execute();
-
-        Personnage nouvPerso = new Personnage("Gerorge", 20, 1, 1, 1, 1);
-        new InsertEntityAsyncTask<Personnage>(personnageDao).execute(nouvPerso);
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(27, 1, 1));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(12, 1, 3));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(35, 1, 5));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(7, 1, 2));
-        new InsertEntityAsyncTask<OwnedSkill>(ownedSkillDao).execute(new OwnedSkill(42, 1, 4));
 
 //        int personnageId = 1;
 //        int ownedSkillId = 1;
