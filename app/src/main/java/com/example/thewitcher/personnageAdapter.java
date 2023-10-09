@@ -1,11 +1,14 @@
 package com.example.thewitcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,10 +75,34 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
             });
         }
 
+
         public void bind(PersonnageDetails personnageDetails) {
             tvTitre.setText(personnageDetails.getPersonnage().getName());
             tvDescription.setText(personnageDetails.getClasse().getName());
             imagePost.setImageResource(R.drawable.aorus_chibi3);
+            imageShowPopup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu popupMenu = new PopupMenu(mContext, imageShowPopup);
+                    popupMenu.getMenuInflater().inflate(R.menu.list_popup_menu, popupMenu.getMenu());
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.itemShow) {
+                                Intent intent = new Intent(mContext, PersonnageActivity.class);
+                                intent.putExtra("titre", personnageDetails.getPersonnage().getName());
+                                mContext.startActivity(intent);
+                            } else if (item.getItemId() == R.id.itemDelete) {
+                                values.remove(getAdapterPosition());
+                                notifyDataSetChanged();
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
         }
     }
 
