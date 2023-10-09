@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thewitcher.Entity.PersonnageDetails;
+import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
