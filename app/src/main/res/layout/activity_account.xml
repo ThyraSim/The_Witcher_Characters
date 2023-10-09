@@ -7,7 +7,7 @@
     tools:context=".AccountActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listPersos"
+        android:id="@+id/listPerso"
         android:layout_width="409dp"
         android:layout_height="729dp"
         android:layout_marginStart="8dp"
