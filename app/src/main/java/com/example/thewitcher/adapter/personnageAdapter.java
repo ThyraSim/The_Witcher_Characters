@@ -45,7 +45,6 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
     @Override
     public void onBindViewHolder(PersonnageViewHolder holder, int position) {
         PersonnageDetails personnageDetails = values.get(position);
-        Log.d("DEBUG", "Binding item at position " + position + ": " + personnageDetails.getPersonnage().getName());
         holder.bind(personnageDetails);
 
     }

@@ -68,8 +68,8 @@ public class BaseEntities {
                 "learn everything there is to know about the " +
                 "phenomenon. Magical Training can also " +
                 "be rolled as a form of Awareness that detects " +
-                "magical beings, spells, and hexes", 5, "5 Novice Spells" +
-                "1 Ritual" +
+                "magical beings, spells, and hexes", 5, "5 Novice Spells \n" +
+                "1 Ritual \n" +
                 "1 Hex"));
         classes.add(new Classe(6, "Man At Arms", "Tough As Nails", "True Men At Arms like the Blue Stripes of Temeria and the Impera Brigade of Nilfgaard are " +
                 "hardened soldiers who never give in or surrender. When a Man At Arms falls to or below 0 Health, they can roll Tough As Nails at " +
@@ -102,8 +102,8 @@ public class BaseEntities {
                 "same faith, though they will likely be able to " +
                 "offer less than a fully supplied church. Keep in " +
                 "mind that Initiate of the Gods doesn’t work " +
-                "with members of other faiths.", 0, "2 Invocations" +
-                "2 Rituals" +
+                "with members of other faiths.", 0, "2 Invocations \n" +
+                "2 Rituals \n" +
                 "2 Hexes"));
         classes.add(new Classe(9, "Witcher", "Witcher Training", "Most of a Witcher’s early life is spent within " +
                 "the walls of their keep, studying huge, dusty " +
