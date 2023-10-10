@@ -9,8 +9,8 @@ public class OwnedSkillWithSkill {
 
     @Relation(
             parentColumn = "skill_id",
-            entityColumn = "skillId"
+            entityColumn = "id"
     )
-    public Skill skill;
+    public OwnedSkill skill;
 }
 
