@@ -11,6 +11,8 @@ import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.classe.ClasseSkillCrossRef;
+import com.example.thewitcher.Entity.gear.Armor;
+import com.example.thewitcher.Entity.gear.Weapon;
 import com.example.thewitcher.Entity.race.Race;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.dao.BaseDao;
@@ -186,4 +188,12 @@ public class BaseRepository<T> {
     public LiveData<List<Skill>> findAllSkills() {
         return skillDao.findAll();
     }
+
+    public LiveData<List<Armor>> findAllArmors(){ return armorDao.findAll(); }
+
+    public LiveData<Armor> findArmorById(int id){ return armorDao.findById(id); }
+
+    public LiveData<List<Weapon>> findAllWeapons(){ return weaponDao.findAll(); }
+
+    public LiveData<Weapon> findWeaponById(int id){ return weaponDao.findById(id); }
 }

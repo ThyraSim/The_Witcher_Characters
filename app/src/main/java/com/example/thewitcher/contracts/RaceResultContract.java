@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.thewitcher.ChooseRaceActivity;
+import com.example.thewitcher.creationSelection.ChooseRaceActivity;
 
 public class RaceResultContract extends ActivityResultContract<Integer, Integer> {
     @NonNull

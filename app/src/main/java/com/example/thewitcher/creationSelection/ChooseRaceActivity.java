@@ -1,4 +1,4 @@
-package com.example.thewitcher;
+package com.example.thewitcher.creationSelection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thewitcher.Entity.race.Race;
+import com.example.thewitcher.R;
 import com.example.thewitcher.adapter.RaceAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
