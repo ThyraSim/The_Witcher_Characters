@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.race.Race;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
+import com.example.thewitcher.contracts.ClassResultContract;
 import com.example.thewitcher.contracts.RaceResultContract;
 import com.example.thewitcher.repository.BaseRepository;
 
@@ -68,9 +69,30 @@ public class CreationActivity extends AppCompatActivity {
                     }
                 });
 
+        //Create ActivityResultLauncher for btnClasse
+        ActivityResultLauncher<Integer> classeResultLauncher =
+                registerForActivityResult(new ClassResultContract(), new ActivityResultCallback<Integer>() {
+                    @Override
+                    public void onActivityResult(Integer result) {
+                        if (result != null && result != -1) {
+                            LiveData<Classe> liveClasse = baseRepository.findClasseById(result);
+                            liveClasse.observe(getLifecycleOwner(), selectedClasse -> {
+                                classe = selectedClasse;
+                                btnClass.setText(classe.getName());
+                            });
+
+                        }
+                    }
+                });
+
         //Create onClickListener for btnRace sending the user to ChooseRaceActivity
         btnRace.setOnClickListener(v -> {
             raceResultLauncher.launch(1);
+        });
+
+        //Create onClickListener for btnClass sending the user to ChooseClassActivity
+        btnClass.setOnClickListener(v -> {
+            classeResultLauncher.launch(1);
         });
     }
 

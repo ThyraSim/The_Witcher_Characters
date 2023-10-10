@@ -13,13 +13,16 @@
         android:theme="@style/Theme.TheWitcher"
         tools:targetApi="31">
         <activity
+            android:name=".ChooseClassActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChooseRaceActivity"
             android:exported="false"
-            android:parentActivityName=".CreationActivity"/>
+            android:parentActivityName=".CreationActivity" />
         <activity
             android:name=".CreationActivity"
             android:exported="false"
-            android:parentActivityName=".AccountActivity"/>
+            android:parentActivityName=".AccountActivity" />
         <activity
             android:name=".PersonnageActivity"
             android:exported="false"

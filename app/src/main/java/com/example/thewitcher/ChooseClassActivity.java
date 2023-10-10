@@ -8,56 +8,56 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.thewitcher.Entity.race.Race;
-import com.example.thewitcher.adapter.RaceAdapter;
+import com.example.thewitcher.Entity.classe.Classe;
+import com.example.thewitcher.adapter.ClassAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
-import com.example.thewitcher.viewModels.RaceViewModel;
+import com.example.thewitcher.viewModels.ClassViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseRaceActivity extends AppCompatActivity {
+public class ChooseClassActivity extends AppCompatActivity {
 
-    private RaceViewModel viewModel;
-    private RaceAdapter adapter;
-    private List<Race> raceArray = new ArrayList<>();
+    private ClassViewModel viewModel;
+    private ClassAdapter adapter;
+    private List<Classe> classeArray = new ArrayList<>();
     private BaseRepository baseRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.race_list);
+        setContentView(R.layout.class_list);
 
         //Set activity title
-        setTitle("Choose your Race");
+        setTitle("Choose your Class");
 
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
 
-        RecyclerView listRaces = findViewById(R.id.listRaces);
-        listRaces.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView listClasses = findViewById(R.id.listClasses);
+        listClasses.setLayoutManager(new LinearLayoutManager(this));
 
-        viewModel = new RaceViewModel(getApplication());
+        viewModel = new ClassViewModel(getApplication());
         baseRepository = new BaseRepository(getApplication());
 
         //Send data to adapter
-        adapter = new RaceAdapter(getApplicationContext(), raceArray, new RaceAdapter.OnItemClickListener() {
+        adapter = new ClassAdapter(getApplicationContext(), classeArray, new ClassAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Race clickedRace = raceArray.get(position);
+                Classe clickedClass = classeArray.get(position);
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("selected_race_id", clickedRace.getRaceId());
+                resultIntent.putExtra("selected_class_id", clickedClass.getClassId());
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });
 
-        listRaces.setAdapter(adapter);
+        listClasses.setAdapter(adapter);
 
-        viewModel.getAllRaces().observe(this, race -> {
-            raceArray = race;
-            adapter.updateData((ArrayList<Race>) race);
+        viewModel.getAllClasses().observe(this, classe -> {
+            classeArray.clear();
+            classeArray.addAll(classe);
             adapter.notifyDataSetChanged();
         });
     }

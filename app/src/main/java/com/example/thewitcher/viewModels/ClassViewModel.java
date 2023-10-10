@@ -5,22 +5,22 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.thewitcher.Entity.race.Race;
+import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.repository.BaseRepository;
 
 import java.util.List;
 
-public class RaceViewModel extends AndroidViewModel {
+public class ClassViewModel extends AndroidViewModel {
     private final BaseRepository repository;
-    private final LiveData<List<Race>> allRaces;
+    private final LiveData<List<Classe>> allClasses;
 
-    public RaceViewModel(Application application) {
+    public ClassViewModel(Application application) {
         super(application);
         repository = new BaseRepository(application);
-        allRaces = repository.findAllRaces();
+        allClasses = repository.findAllClasses();
     }
 
-    public LiveData<List<Race>> getAllRaces() {
-        return allRaces;
+    public LiveData<List<Classe>> getAllClasses() {
+        return allClasses;
     }
 }
