@@ -13,9 +13,17 @@
         android:theme="@style/Theme.TheWitcher"
         tools:targetApi="31">
         <activity
+            android:name=".ChooseRaceActivity"
+            android:exported="false"
+            android:parentActivityName=".CreationActivity"/>
+        <activity
+            android:name=".CreationActivity"
+            android:exported="false"
+            android:parentActivityName=".AccountActivity"/>
+        <activity
             android:name=".PersonnageActivity"
-            android:parentActivityName=".AccountActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".AccountActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
