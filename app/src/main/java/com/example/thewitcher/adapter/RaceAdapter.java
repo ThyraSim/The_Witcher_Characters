@@ -59,6 +59,7 @@ public class RaceAdapter extends RecyclerView.Adapter<RaceAdapter.RaceViewHolder
             txtPerk2 = itemView.findViewById(R.id.txtPerk2);
             txtPerk3 = itemView.findViewById(R.id.txtPerk3);
             txtPerk4 = itemView.findViewById(R.id.txtPerk4);
+            imageView3 = itemView.findViewById(R.id.imageView3);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -70,6 +71,7 @@ public class RaceAdapter extends RecyclerView.Adapter<RaceAdapter.RaceViewHolder
 
         public void bind(Race race){
             txtRaceName.setText(race.getName());
+            imageView3.setImageResource(R.drawable.aorus_chibi3);
             txtPerk1.setText(race.getPerk1());
             txtPerk2.setText(race.getPerk2());
             txtPerk3.setText(race.getPerk3());
@@ -78,7 +80,6 @@ public class RaceAdapter extends RecyclerView.Adapter<RaceAdapter.RaceViewHolder
             }else{
                 txtPerk4.setVisibility(View.GONE);
             }
-
         }
     }
 

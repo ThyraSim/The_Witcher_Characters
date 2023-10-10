@@ -30,6 +30,9 @@ public class ChooseRaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.race_list);
 
+        //Set activity title
+        setTitle("Choose your Race");
+
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
 

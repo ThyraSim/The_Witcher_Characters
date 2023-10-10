@@ -70,7 +70,7 @@ public class CreationActivity extends AppCompatActivity {
 
         //Create onClickListener for btnRace sending the user to ChooseRaceActivity
         btnRace.setOnClickListener(v -> {
-            raceResultLauncher.launch(1); // 1 is a dummy input, replace if you have actual input to send
+            raceResultLauncher.launch(1);
         });
     }
 
