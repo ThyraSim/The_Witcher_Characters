@@ -71,7 +71,6 @@ public class RaceAdapter extends RecyclerView.Adapter<RaceAdapter.RaceViewHolder
 
         public void bind(Race race){
             txtRaceName.setText(race.getName());
-            imageView3.setImageResource(R.drawable.aorus_chibi3);
             txtPerk1.setText(race.getPerk1());
             txtPerk2.setText(race.getPerk2());
             txtPerk3.setText(race.getPerk3());
@@ -79,6 +78,19 @@ public class RaceAdapter extends RecyclerView.Adapter<RaceAdapter.RaceViewHolder
                 txtPerk4.setText(race.getPerk4());
             }else{
                 txtPerk4.setVisibility(View.GONE);
+            }
+            String resourceName = race.getName().toLowerCase().replace(" ", "_");
+
+            int resourceId = mContext.getResources().getIdentifier(
+                    resourceName,
+                    "drawable",
+                    mContext.getPackageName()
+            );
+
+            if(resourceId != 0) {
+                imageView3.setImageResource(resourceId);
+            } else {
+                imageView3.setImageResource(R.drawable.aorus_chibi3);
             }
         }
     }

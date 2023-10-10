@@ -86,7 +86,20 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
             txtDescription.setText(classe.getDefiningDescription());
             txtVigor.setText(Integer.toString(classe.getVigor()));
             txtMagic.setText(classe.getMagicPerks());
-            imageView2.setImageResource(R.drawable.aorus_chibi3);
+
+            String resourceName = classe.getName().toLowerCase().replace(" ", "_");
+
+            int resourceId = mContext.getResources().getIdentifier(
+                    resourceName,
+                    "drawable",
+                    mContext.getPackageName()
+            );
+
+            if(resourceId != 0) {
+                imageView2.setImageResource(resourceId);
+            } else {
+                imageView2.setImageResource(R.drawable.aorus_chibi3);
+            }
         }
     }
 
