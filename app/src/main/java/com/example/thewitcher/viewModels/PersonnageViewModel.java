@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.thewitcher.Entity.OwnedSkill;
+import com.example.thewitcher.Entity.OwnedSkillWithSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.repository.BaseRepository;
 
@@ -32,7 +33,11 @@ public class PersonnageViewModel extends AndroidViewModel {
     }
 
     //Renvoie les skills d'un personnage par son id
-    public LiveData<List<OwnedSkill>> getPersonnageSkillsById(int id) {
+    public LiveData<List<OwnedSkillWithSkill>> getPersonnageSkillsById(int id) {
+        return repository.findOwnedSkillByPersonnageId(id);
+    }
+
+    public LiveData<List<OwnedSkill>> getOwnedSkillById(int id) {
         return repository.findOwnedSkillByPersonnageId(id);
     }
 }

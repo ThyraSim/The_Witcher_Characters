@@ -1,11 +1,8 @@
 package com.example.thewitcher;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -15,15 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thewitcher.Entity.OwnedSkill;
+import com.example.thewitcher.Entity.OwnedSkillWithSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
+import com.example.thewitcher.adapter.SkillsAdapter;
 import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
-import com.example.thewitcher.adapter.SkillsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +58,6 @@ private PersonnageViewModel viewModel;
         gearRecyclerView = findViewById(R.id.gearRecyclerView);
         backgroundScrollView = findViewById(R.id.svBackground);
 
-        
-//... et ainsi de suite pour toutes les autres vues
 
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
@@ -71,6 +67,9 @@ private PersonnageViewModel viewModel;
 
         // Initialisation du viewModel
         viewModel = new PersonnageViewModel(getApplication());
+
+        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         skillsAdapter = new SkillsAdapter(new ArrayList<>()); // Initialize with empty list
         skillsRecyclerView.setAdapter(skillsAdapter); // Set the adapter to RecyclerView
 
@@ -104,10 +103,11 @@ private PersonnageViewModel viewModel;
 //            tvBackground.setText(persoDetails.getPersonnage().getBackground());
 //            backgroundLayout.addView(tvBackground);
         });
+
         //Afficher les skills
-        LiveData<List<OwnedSkill>> oSkills = viewModel.getPersonnageSkillsById(id);
+        LiveData<List<OwnedSkill>> oSkills = viewModel.getOwnedSkillById(id);
         oSkills.observe(this, ownedSkills -> {
-            List<Skill> skills = new ArrayList<>();
+            List<OwnedSkillWithSkill> ownedSkillWithSkills = new ArrayList<>();
 
             // Utilisez un compteur pour savoir quand toutes les compétences ont été récupérées
             AtomicInteger counter = new AtomicInteger(0);
@@ -115,11 +115,16 @@ private PersonnageViewModel viewModel;
             for (OwnedSkill oSkill : ownedSkills) {
                 LiveData<Skill> skill = baseRepository.findSkillById(oSkill.getSkillId());
                 skill.observe(this, skill1 -> {
-                    skills.add(skill1);
+                    OwnedSkillWithSkill ownedSkillWithSkill = new OwnedSkillWithSkill();
+                    ownedSkillWithSkill.ownedSkill = oSkill;
+                    ownedSkillWithSkill.skill = skill1;
+                    ownedSkillWithSkills.add(ownedSkillWithSkill);
 
                     // Si toutes les compétences ont été récupérées, mettez à jour l'adaptateur
                     if (counter.incrementAndGet() == ownedSkills.size()) {
-                        skillsAdapter.updateSkills(ownedSkills);
+                        Log.d("Data: ", "Updating skills adapter");
+                        skillsAdapter = new SkillsAdapter(ownedSkillWithSkills);
+                        skillsRecyclerView.setAdapter(skillsAdapter);
                     }
                 });
             }

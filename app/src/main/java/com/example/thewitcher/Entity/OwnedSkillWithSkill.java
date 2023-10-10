@@ -11,6 +11,6 @@ public class OwnedSkillWithSkill {
             parentColumn = "skill_id",
             entityColumn = "id"
     )
-    public OwnedSkill skill;
+    public Skill skill;
 }
 

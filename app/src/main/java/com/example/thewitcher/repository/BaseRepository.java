@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.example.thewitcher.Entity.OwnedSkill;
+import com.example.thewitcher.Entity.OwnedSkillWithSkill;
 import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
@@ -137,6 +138,10 @@ public class BaseRepository<T> {
 
     public LiveData<List<OwnedSkill>> findOwnedSkillByPersonnageId(int personnageId) {
         return ownedSkillDao.findSkillsForPersonnage(personnageId);
+    }
+
+    public LiveData<List<OwnedSkillWithSkill>> findSkillsWithDetailsByPersonnageId(int personnageId) {
+        return ownedSkillDao.getOwnedSkillsWithDetailsByPersonnageId(personnageId);
     }
 
     public void insertPersonnage(Personnage personnage) {

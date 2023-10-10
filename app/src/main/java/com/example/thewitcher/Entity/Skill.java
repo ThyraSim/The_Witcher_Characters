@@ -11,13 +11,13 @@ public class Skill {
     @ColumnInfo(name = "id")
     private int skillId;
     private String nomSkill;
-    private int cost;
+    private Integer cost;
 
     @Ignore
     public Skill() {
     }
 
-    public Skill(int skillId, String nomSkill, int cost) {
+    public Skill(int skillId, String nomSkill, Integer cost) {
         this.skillId = skillId;
         this.nomSkill = nomSkill;
         this.cost = cost;
@@ -39,11 +39,11 @@ public class Skill {
         this.nomSkill = nomSkill;
     }
 
-    public int getCost() {
+    public Integer getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(Integer cost) {
         this.cost = cost;
     }
 }

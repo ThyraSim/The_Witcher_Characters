@@ -13,22 +13,22 @@ import androidx.room.PrimaryKey;
         onDelete = ForeignKey.CASCADE))
 public class OwnedSkill {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "ownedId")
     private int ownedSkillId;
 
     @ColumnInfo(name = "skill_id")
-    private int skillId;
+    private Integer skillId;
 
     @ColumnInfo(name = "personnage_id")
-    private int personnageId;  // This column is a foreign key.
+    private Integer personnageId;  // This column is a foreign key.
 
-    private int value;
+    private Integer value;
 
     @Ignore
     public OwnedSkill() {
     }
 
-    public OwnedSkill(int ownedSkillId, int skillId, int personnageId, int value) {
+    public OwnedSkill(int ownedSkillId, Integer skillId, Integer personnageId, Integer value) {
         this.ownedSkillId = ownedSkillId;
         this.skillId = skillId;
         this.personnageId = personnageId;
@@ -42,19 +42,19 @@ public class OwnedSkill {
         this.value = value;
     }
 
-    public int getSkillId() {
+    public Integer getSkillId() {
         return skillId;
     }
 
-    public void setSkillId(int skillId) {
+    public void setSkillId(Integer skillId) {
         this.skillId = skillId;
     }
 
-    public int getPersonnageId() {
+    public Integer getPersonnageId() {
         return personnageId;
     }
 
-    public void setPersonnageId(int personnageId) {
+    public void setPersonnageId(Integer personnageId) {
         this.personnageId = personnageId;
     }
 
@@ -68,11 +68,11 @@ public class OwnedSkill {
 
 
 
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 }
