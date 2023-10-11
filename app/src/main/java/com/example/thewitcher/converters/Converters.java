@@ -2,7 +2,6 @@ package com.example.thewitcher.converters;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.ClassWithSkills;
@@ -12,6 +11,8 @@ import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.dao.SkillDao;
 import com.example.thewitcher.dao.classe.ClasseDao;
 import com.example.thewitcher.repository.BaseRepository;
+
+import java.util.Collections;
 
 public class Converters {
     WitcherRoomDatabase database;
@@ -42,28 +43,24 @@ public class Converters {
         ClassWithSkills classWithSkills = new ClassWithSkills();
 
         LiveData<Classe> classeLiveData = classeDao.findById(crossRef.classe_id);
-        classeLiveData.observe(lifecycleOwner, new Observer<Classe>() {
-            @Override
-            public void onChanged(Classe classe) {
-                // Update your UI or perform any necessary actions with the classe object
-                if (classe != null) {
-                    classWithSkills.classe = classe;
-                }
+        classeLiveData.observe(lifecycleOwner, classe -> {
+            // Update your UI or perform any necessary actions with the classe object
+            if (classe != null) {
+                classWithSkills.classe = classe;
             }
         });
+
         LiveData<Skill> skillLiveData = skillDao.findById(crossRef.id);
-        classeLiveData.observe(lifecycleOwner, new Observer<Classe>() {
-            @Override
-            public void onChanged(Classe classe) {
-                // Update your UI or perform any necessary actions with the classe object
-                if (classe != null) {
-                    classWithSkills.classe = classe;
-                }
+        skillLiveData.observe(lifecycleOwner, skill -> {
+            // Update your UI or perform any necessary actions with the skill object
+            if (skill != null) {
+                classWithSkills.skills = Collections.singletonList(skill);  // Assuming classWithSkills has a list of skills.
             }
         });
 
         return classWithSkills;
     }
+
 
     public ClasseSkillCrossRef mapToClasseSkillCrossRef(ClassWithSkills classWithSkills) {
         ClasseSkillCrossRef crossRef = new ClasseSkillCrossRef();

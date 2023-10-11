@@ -29,9 +29,6 @@ public interface ClasseSkillCrossRefDao extends BaseDao<ClasseSkillCrossRef> {
             "INNER JOIN skill ON ClasseSkillCrossRef.id = skill.id WHERE classe.id = :searchId")
     LiveData<ClasseSkillCrossRef> findById(int searchId);
 
-//    @RawQuery(observedEntities = {Classe.class, Skill.class})
-//    LiveData<List<ClassWithSkills>> getAllClassesWithSkills(SupportSQLiteQuery query);
-
     @Query("Select Skill.id, Skill.nomSkill, Skill.cost from ClasseSkillCrossRef " +
             "INNER JOIN Skill ON ClasseSkillCrossRef.id = Skill.id where ClasseSkillCrossRef.classe_id = :searchId")
     LiveData<List<Skill>> findSkillsByClassId(int searchId);

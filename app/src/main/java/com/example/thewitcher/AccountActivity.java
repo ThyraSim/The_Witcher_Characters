@@ -85,7 +85,8 @@ public class AccountActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.itemAdd) {
-            Toast.makeText(this, "Add new post", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, CreationActivity.class);
+            startActivity(intent);
         } else if (itemId == R.id.itemConfig) {
             Toast.makeText(this, "Enter into config", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.itemLogout) {
