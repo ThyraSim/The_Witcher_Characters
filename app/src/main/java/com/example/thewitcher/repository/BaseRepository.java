@@ -146,8 +146,8 @@ public class BaseRepository<T> {
         return ownedSkillDao.getOwnedSkillsWithDetailsByPersonnageId(personnageId);
     }
 
-    public void insertPersonnage(Personnage personnage) {
-        personnageDao.insert(personnage);
+    public int insertPersonnage(Personnage personnage) {
+        return (int) personnageDao.insert(personnage);
     }
 
     public void deletePersonnage(Personnage personnage) {
@@ -196,4 +196,8 @@ public class BaseRepository<T> {
     public LiveData<List<Weapon>> findAllWeapons(){ return weaponDao.findAll(); }
 
     public LiveData<Weapon> findWeaponById(int id){ return weaponDao.findById(id); }
+
+    public WitcherRoomDatabase getDatabase() {
+        return database;
+    }
 }

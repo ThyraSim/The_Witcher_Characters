@@ -1,36 +1,54 @@
 package com.example.thewitcher;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.thewitcher.Entity.OwnedSkill;
+import com.example.thewitcher.Entity.Personnage;
+import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
 import com.example.thewitcher.Entity.race.Race;
+import com.example.thewitcher.adapter.SkillSelectionAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.contracts.ArmorResultContract;
 import com.example.thewitcher.contracts.ClassResultContract;
 import com.example.thewitcher.contracts.RaceResultContract;
 import com.example.thewitcher.contracts.WeaponResultContract;
 import com.example.thewitcher.repository.BaseRepository;
+import com.example.thewitcher.viewModels.SkillViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class CreationActivity extends AppCompatActivity {
 
-    EditText txtNameInput;
+    EditText txtNameInput, txtAge, txtBackground;
     Button btnSave, btnRace, btnClass, btnArmor, btnWeapon;
     Race race = null;
     Classe classe = null;
     Armor armor = null;
     Weapon weapon = null;
+    Map<Skill, Integer> skillLevels;
     BaseRepository baseRepository;
+    SkillSelectionAdapter adapter;
+    SkillViewModel viewModel;
+    List<Skill> skillArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +65,39 @@ public class CreationActivity extends AppCompatActivity {
         setTitle("New Character");
 
         txtNameInput = findViewById(R.id.txtNameInput);
+        txtAge = findViewById(R.id.txtAge);
+        txtBackground = findViewById(R.id.txtBackground);
         btnSave = findViewById(R.id.btnSave);
         btnRace = findViewById(R.id.btnRace);
         btnClass = findViewById(R.id.btnClass);
         btnArmor = findViewById(R.id.btnArmor);
         btnWeapon = findViewById(R.id.btnWeapon);
 
-        //Create onClickListener for btnSave that will save the name in String name
+        //Create onClickListener for btnSave to save the new informations in the database
         btnSave.setOnClickListener(v -> {
             String name = txtNameInput.getText().toString();
-            //Vérification de la valeur de name dans debug
-            Log.d("DEBUG", "Name is: " + name);
+            int age = Integer.parseInt(txtAge.getText().toString());
+            String background = txtBackground.getText().toString();
+
+            CompletableFuture.supplyAsync(() -> {
+                // Insert personnage and get its ID
+                int personnageId = baseRepository.insertPersonnage(
+                        new Personnage(name, age, race.getRaceId(), classe.getClassId(),
+                                armor.getArmorId(), weapon.getWeaponId(),
+                                background));
+                return personnageId;
+            }).thenAccept(personnageId -> {
+                // Use the personnageId to insert owned skills
+                for (Map.Entry<Skill, Integer> entry : skillLevels.entrySet()) {
+                    baseRepository.insertOwnedSkill(new OwnedSkill(entry.getKey().getSkillId(),
+                            personnageId,
+                            entry.getValue()));
+                }
+            });
+            Intent intent = new Intent(CreationActivity.this, AccountActivity.class);
+            startActivity(intent);
         });
+
 
         //Create ActivityResultLauncher for btnRace
         ActivityResultLauncher<Integer> raceResultLauncher =
@@ -86,6 +125,34 @@ public class CreationActivity extends AppCompatActivity {
                             liveClasse.observe(getLifecycleOwner(), selectedClasse -> {
                                 classe = selectedClasse;
                                 btnClass.setText(classe.getName());
+
+                                RecyclerView listCreationSkill = findViewById(R.id.listCreationSkills);
+                                listCreationSkill.setLayoutManager(new LinearLayoutManager(getApplication()));
+
+                                viewModel = new SkillViewModel(getApplication(), classe.getClassId());
+
+                                Log.d("data", "skillArray: " + skillArray.size());
+                                //Send data to adapter
+                                adapter = new SkillSelectionAdapter(getApplicationContext(), skillArray);
+                                adapter.setOnTotalSkillLevelChangeListener(new SkillSelectionAdapter.OnTotalSkillLevelChangeListener() {
+                                    @Override
+                                    public void onTotalSkillLevelChange(int totalSkillLevel) {
+                                        int availableSkillPoints = 20 - totalSkillLevel;
+                                        if(availableSkillPoints < 0) availableSkillPoints = 0;
+                                        TextView txtSkillPoints = findViewById(R.id.txtSkillPoints);
+                                        txtSkillPoints.setText(String.valueOf(availableSkillPoints));
+
+                                        skillLevels = adapter.getSkillLevels();
+                                    }
+                                });
+
+                                listCreationSkill.setAdapter(adapter);
+
+                                viewModel.getAllSkills().observe(getLifecycleOwner(), skill -> {
+                                    skillArray.clear();
+                                    skillArray.addAll(skill);
+                                    adapter.notifyDataSetChanged();
+                                });
                             });
 
                         }
