@@ -27,8 +27,8 @@
             android:parentActivityName=".CreationActivity" />
         <activity
             android:name=".CreationActivity"
-            android:exported="false"
-            android:parentActivityName=".AccountActivity" />
+            android:parentActivityName=".AccountActivity"
+            android:exported="false" />
         <activity
             android:name=".PersonnageActivity"
             android:exported="false"

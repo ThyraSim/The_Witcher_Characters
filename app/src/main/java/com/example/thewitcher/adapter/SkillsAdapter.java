@@ -1,6 +1,5 @@
 package com.example.thewitcher.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,7 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
     @Override
     public void onBindViewHolder(@NonNull SkillViewHolder holder, int position) {
         OwnedSkillWithSkill skill = skills.get(position);
-        holder.skillName.setText(String.valueOf(skill.ownedSkill.getOwnedSkillId()));
-        holder.bind(skill.skill);
+        holder.bind(skill.skill, skill.ownedSkill.getValue());
     }
 
     @Override
@@ -57,8 +55,7 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
             skillName = itemView.findViewById(R.id.tvSkillName);
         }
 
-        public void bind(Skill skill){
-            Log.d("Data", skill.getNomSkill());
+        public void bind(Skill skill, int level){
             skillName.setText(skill.getNomSkill());
         }
     }
