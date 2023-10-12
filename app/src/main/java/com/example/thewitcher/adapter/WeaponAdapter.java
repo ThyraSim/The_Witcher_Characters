@@ -14,12 +14,12 @@ import com.example.thewitcher.R;
 
 import java.util.List;
 
-public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponViewHolder>{
+public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponViewHolder> {
     private final Context mContext;
     private List<Weapon> values;
     private final OnItemClickListener listener;
 
-    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener){
+    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener) {
         this.mContext = mContext;
         this.values = values;
         this.listener = listener;
@@ -30,13 +30,13 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
     }
 
     @Override
-    public WeaponViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public WeaponViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_choose_weapon, parent, false);
         return new WeaponViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(WeaponViewHolder holder, int position){
+    public void onBindViewHolder(WeaponViewHolder holder, int position) {
         Weapon weapon = values.get(position);
         holder.bind(weapon);
     }
@@ -47,11 +47,11 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
         return itemCount;
     }
 
-    public class WeaponViewHolder extends RecyclerView.ViewHolder{
+    public class WeaponViewHolder extends RecyclerView.ViewHolder {
         TextView txtWeaponName, txtDamage, txtHands;
         ImageView imageWeapon;
 
-        public WeaponViewHolder(View itemView){
+        public WeaponViewHolder(View itemView) {
             super(itemView);
             txtWeaponName = itemView.findViewById(R.id.txtWeaponName);
             txtDamage = itemView.findViewById(R.id.txtDamage);
@@ -59,39 +59,36 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
             imageWeapon = itemView.findViewById(R.id.imageWeapon);
         }
 
-        public void bind(final Weapon weapon){
-            txtWeaponName.setText(weapon.getName());
-            txtDamage.setText(weapon.getDamage());
-            txtHands.setText(String.valueOf(weapon.getHands()));
 
-            String resourceName = weapon.getName().toLowerCase().replace(" ", "_");
+        public void bind(final Weapon weapon) {
+            if (weapon != null) {
+                txtWeaponName.setText(weapon.getName() != null ? weapon.getName() : "Unknown Weapon");
+                txtDamage.setText(weapon.getDamage() != null ? weapon.getDamage() : "0");
+                txtHands.setText(weapon.getHands() != null ? String.valueOf(weapon.getHands()) : "Unknown");
 
-            int resourceId = mContext.getResources().getIdentifier(
-                    resourceName,
-                    "drawable",
-                    mContext.getPackageName()
-            );
+                String resourceName = weapon.getName().toLowerCase().replace(" ", "_");
 
-            if(resourceId != 0) {
-                imageWeapon.setImageResource(resourceId);
-            } else {
-                imageWeapon.setImageResource(R.drawable.aorus_chibi3);
-            }
+                int resourceId = mContext.getResources().getIdentifier(
+                        resourceName,
+                        "drawable",
+                        mContext.getPackageName()
+                );
 
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    listener.onItemClick(getAdapterPosition());
+                if (resourceId != 0) {
+                    imageWeapon.setImageResource(resourceId);
+                } else {
+                    imageWeapon.setImageResource(R.drawable.arme);
                 }
-            });
 
-
+            }
         }
     }
 
-    public void updateData(List<Weapon> weaponArray){
-        this.values = weaponArray;
-        notifyDataSetChanged();
+
+        public void updateData(List<Weapon> weaponArray) {
+            this.values = weaponArray;
+            notifyDataSetChanged();
+        }
+
     }
 
-}

@@ -51,4 +51,15 @@ public class Weapon {
     public void setHands(Integer hands) {
         this.hands = hands;
     }
+
+    @Override
+    public String toString() {
+        return "Weapon{" +
+                "weaponId=" + weaponId +
+                ", name='" + name + '\'' +
+                ", damage='" + damage + '\'' +
+                ", hands=" + hands +
+                '}';
+    }
 }
+

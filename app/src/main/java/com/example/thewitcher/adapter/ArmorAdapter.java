@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHolder> {
@@ -60,7 +61,11 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
 
         public void bind(final Armor armor){
             txtArmorName.setText(armor.getName());
-            txtSP.setText(Integer.toString(armor.getSp()));
+            if(armor.getSp() !=null) {
+                txtSP.setText(Integer.toString(armor.getSp()));
+            }else{
+                txtSP.setText("Default Value");
+            }
 
             String resourceName = armor.getName().toLowerCase().replace(" ", "_");
 
@@ -73,17 +78,12 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
             if(resourceId != 0) {
                 imageArmor.setImageResource(resourceId);
             } else {
-                imageArmor.setImageResource(R.drawable.aorus_chibi3);
+                imageArmor.setImageResource(R.drawable.armure);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    listener.onItemClick(getAdapterPosition());
-                }
-            });
         }
     }
+
 
     public void updateData(List<Armor> armors){
         this.values = armors;
