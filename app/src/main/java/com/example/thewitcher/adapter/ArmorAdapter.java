@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHolder> {
@@ -79,6 +78,15 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
                 imageArmor.setImageResource(resourceId);
             } else {
                 imageArmor.setImageResource(R.drawable.armure);
+            }
+
+            if(listener != null){
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onItemClick(getAdapterPosition());
+                    }
+                });
             }
 
         }

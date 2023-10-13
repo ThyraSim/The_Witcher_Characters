@@ -1,5 +1,6 @@
 package com.example.thewitcher.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
         }
 
         public void bind(Skill skill, int level){
+            Log.d("Test", ""+level);
             skillName.setText(skill.getNomSkill());
         }
     }

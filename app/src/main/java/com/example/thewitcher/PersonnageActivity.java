@@ -106,6 +106,7 @@ private PersonnageViewModel viewModel;
             //Afficher l'arme
             Weapon weapon = persoDetails.getWeapon();
             if (weapon != null) {
+                Log.d("Test", "Name: "+weapon.getName()+" Damage: "+weapon.getDamage()+" Hands: "+weapon.getHands());
                 weaponAdapter.updateData(Collections.singletonList(weapon));
             }
             // Afficher l'histoire

@@ -80,6 +80,15 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
                     imageWeapon.setImageResource(R.drawable.arme);
                 }
 
+                if(listener != null){
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onItemClick(getAdapterPosition());
+                        }
+                    });
+                }
+
             }
         }
     }

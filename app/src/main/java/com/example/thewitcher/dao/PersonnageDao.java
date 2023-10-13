@@ -20,8 +20,8 @@ public interface PersonnageDao extends BaseDao<Personnage> {
     @Query("SELECT personnage.*, " +
             "race.id AS race_id, race.name AS race_name, " +
             "classe.id AS classe_id, classe.name AS classe_name, " +
-            "weapon.id AS weapon_id, weapon.name AS weapon_name, " +
-            "armor.id AS armor_id, armor.name AS armor_name " +
+            "weapon.id AS weapon_id, weapon.name AS weapon_name, weapon.damage AS weapon_damage, weapon.hands AS weapon_hands, " +
+            "armor.id AS armor_id, armor.name AS armor_name, armor.sp AS armor_sp " +
             "FROM personnage " +
             "JOIN race ON personnage.raceId = race.id " +
             "JOIN classe ON personnage.classeId = classe.id " +
