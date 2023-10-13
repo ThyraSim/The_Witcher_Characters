@@ -43,6 +43,9 @@ public class AccountActivity extends AppCompatActivity {
         //Création du répository complet (tous les DAO)
         baseRepository = new BaseRepository(getApplication());
 
+        //Set activity title
+        setTitle("Your Characters");
+
         RecyclerView listPersos = findViewById(R.id.listPerso);
 
         listPersos.setLayoutManager(new LinearLayoutManager(this));

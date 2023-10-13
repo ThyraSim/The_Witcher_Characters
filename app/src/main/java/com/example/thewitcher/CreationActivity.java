@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -44,6 +45,7 @@ public class CreationActivity extends AppCompatActivity {
     Classe classe = null;
     Armor armor = null;
     Weapon weapon = null;
+    int availableSkillPoints = 20;
     Map<Skill, Integer> skillLevels;
     BaseRepository baseRepository;
     SkillSelectionAdapter adapter;
@@ -76,9 +78,23 @@ public class CreationActivity extends AppCompatActivity {
         //Create onClickListener for btnSave to save the new informations in the database
         btnSave.setOnClickListener(v -> {
             String name = txtNameInput.getText().toString();
-            int age = Integer.parseInt(txtAge.getText().toString());
+            int age;
+            try{
+                age = Integer.parseInt(txtAge.getText().toString());
+            } catch (NumberFormatException e){
+                showMessage("The age must be a number");
+                return;
+            }
             String background = txtBackground.getText().toString();
 
+            if(name.isEmpty()){ showMessage("The name cannot be empty"); return; }
+            if(age < 0){ showMessage("The age cannot be negative"); return; }
+            if(background.isEmpty()){ showMessage("The background cannot be empty"); return; }
+            if(classe == null) { showMessage("Please select a class"); return; }
+            if(race == null) { showMessage("Please select a race"); return; }
+            if(armor == null) { showMessage("Please select an armor"); return; }
+            if(weapon == null) { showMessage("Please select a weapon"); return; }
+            if(availableSkillPoints != 0) { showMessage("Please use all your skill points"); return; }
             CompletableFuture.supplyAsync(() -> {
                 // Insert personnage and get its ID
                 int personnageId = baseRepository.insertPersonnage(
@@ -137,7 +153,7 @@ public class CreationActivity extends AppCompatActivity {
                                 adapter.setOnTotalSkillLevelChangeListener(new SkillSelectionAdapter.OnTotalSkillLevelChangeListener() {
                                     @Override
                                     public void onTotalSkillLevelChange(int totalSkillLevel) {
-                                        int availableSkillPoints = 20 - totalSkillLevel;
+                                        availableSkillPoints = 20 - totalSkillLevel;
                                         if(availableSkillPoints < 0) availableSkillPoints = 0;
                                         TextView txtSkillPoints = findViewById(R.id.txtSkillPoints);
                                         txtSkillPoints.setText(String.valueOf(availableSkillPoints));
@@ -212,5 +228,9 @@ public class CreationActivity extends AppCompatActivity {
 
     private LifecycleOwner getLifecycleOwner() {
         return this;
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

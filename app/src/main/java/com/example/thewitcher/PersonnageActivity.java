@@ -81,9 +81,24 @@ private PersonnageViewModel viewModel;
 
 
     private void loadCharacterDetails(int id) {
-        imageView.setImageResource(R.drawable.aorus_chibi3);
         LiveData<PersonnageDetails> personnageDetails = viewModel.getPersonnageDetailsById(id);
         personnageDetails.observe(this, persoDetails -> {
+            //Set activity title
+            setTitle(persoDetails.getPersonnage().getName());
+
+            String resourceName = persoDetails.getClasse().getName().toLowerCase().replace(" ", "_");
+
+            int resourceId = this.getResources().getIdentifier(
+                    resourceName,
+                    "drawable",
+                    this.getPackageName()
+            );
+
+            if(resourceId != 0) {
+                imageView.setImageResource(resourceId);
+            } else {
+                imageView.setImageResource(R.drawable.aorus_chibi3);
+            }
             // Afficher les détails du personnage
             tvClass.setText(persoDetails.getClasse().getName());
             tvRace.setText(persoDetails.getRace().getName());

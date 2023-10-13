@@ -118,6 +118,18 @@ public class MainActivity extends AppCompatActivity {
 //        updatePersonnageName(personnageId);
 //        updatePersonnageArmorName(personnageId);
 //        updateOwnedSkillName(ownedSkillId);
+
+
+        LiveData<List<Personnage>> personnageListLiveData = baseRepository.findAllPersonnages();
+        personnageListLiveData.observe(this, new Observer<List<Personnage>>() {
+            @Override
+            public void onChanged(List<Personnage> personnageList) {
+                if (!personnageList.isEmpty()) {
+                    Personnage personnage = personnageList.get(0);
+                    txtPersoName.setText(personnage.getName());
+                }
+            }
+        });
     }
     private void setListeners(){
 

@@ -80,7 +80,19 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
         public void bind(PersonnageDetails personnageDetails) {
             tvTitre.setText(personnageDetails.getPersonnage().getName());
             tvDescription.setText(personnageDetails.getClasse().getName());
-            imagePost.setImageResource(R.drawable.aorus_chibi3);
+            String resourceName = personnageDetails.getClasse().getName().toLowerCase().replace(" ", "_");
+
+            int resourceId = mContext.getResources().getIdentifier(
+                    resourceName,
+                    "drawable",
+                    mContext.getPackageName()
+            );
+
+            if(resourceId != 0) {
+                imagePost.setImageResource(resourceId);
+            } else {
+                imagePost.setImageResource(R.drawable.aorus_chibi3);
+            }
             imageShowPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
