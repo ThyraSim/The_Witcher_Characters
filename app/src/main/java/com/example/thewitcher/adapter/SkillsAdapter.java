@@ -50,10 +50,13 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
 
     public static class SkillViewHolder extends RecyclerView.ViewHolder {
         TextView skillName;
+        TextView skillLevel;
 
         public SkillViewHolder(@NonNull View itemView) {
             super(itemView);
             skillName = itemView.findViewById(R.id.tvSkillName);
+            skillLevel = itemView.findViewById(R.id.txtLevel);
+
         }
 
         public void bind(Skill skill, int level){

@@ -15,6 +15,7 @@ import com.example.thewitcher.R;
 import java.util.List;
 
 public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponViewHolder> {
+    private boolean showWeaponName = true;
     private final Context mContext;
     private List<Weapon> values;
     private final OnItemClickListener listener;
@@ -23,6 +24,12 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
         this.mContext = mContext;
         this.values = values;
         this.listener = listener;
+    }
+    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener, boolean showWeaponName) {
+        this.mContext = mContext;
+        this.values = values;
+        this.listener = listener;
+        this.showWeaponName = showWeaponName;
     }
 
     public interface OnItemClickListener {
@@ -48,21 +55,32 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
     }
 
     public class WeaponViewHolder extends RecyclerView.ViewHolder {
-        TextView txtWeaponName, txtDamage, txtHands;
         ImageView imageWeapon;
+        TextView txtWeaponName;
+        TextView txtDamage;
+
+        TextView txtHands;
+
+
 
         public WeaponViewHolder(View itemView) {
             super(itemView);
+            imageWeapon = itemView.findViewById(R.id.imageWeapon);
             txtWeaponName = itemView.findViewById(R.id.txtWeaponName);
             txtDamage = itemView.findViewById(R.id.txtDamage);
+
             txtHands = itemView.findViewById(R.id.txtHands);
-            imageWeapon = itemView.findViewById(R.id.imageWeapon);
+
         }
 
 
         public void bind(final Weapon weapon) {
             if (weapon != null) {
-                txtWeaponName.setText(weapon.getName() != null ? weapon.getName() : "Unknown Weapon");
+                if (showWeaponName){
+                    txtWeaponName.setText(weapon.getName());
+                }else if(showWeaponName == false){
+                txtWeaponName.setText("");
+                }
                 txtDamage.setText(weapon.getDamage() != null ? weapon.getDamage() : "0");
                 txtHands.setText(weapon.getHands() != null ? String.valueOf(weapon.getHands()) : "Unknown");
 

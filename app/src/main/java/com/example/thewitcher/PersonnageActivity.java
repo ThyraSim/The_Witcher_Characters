@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.OwnedSkillWithSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
+import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
@@ -40,7 +41,7 @@ private PersonnageViewModel viewModel;
     private BaseRepository baseRepository;
     // Views définies dans votre fichier XML
     private ImageView imageView;
-    private TextView tvClass,tvRace,tvDescription;
+    private TextView tvClass,tvRace,tvBackground, tvLevel,tvWeaponName,tvArmorName,tvTitle;
     private RecyclerView skillsRecyclerView,armorRecyclerView,gearRecyclerView;
     private ScrollView backgroundScrollView;
 
@@ -52,6 +53,11 @@ private PersonnageViewModel viewModel;
         setContentView(R.layout.activity_personnage);
         initViews();
         setupRecyclerViews();
+
+
+
+
+
 
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
@@ -82,25 +88,35 @@ private PersonnageViewModel viewModel;
         armorRecyclerView = findViewById(R.id.armorRecyclerView);
         gearRecyclerView = findViewById(R.id.gearRecyclerView);
         gearRecyclerView.setNestedScrollingEnabled(false);
-        backgroundScrollView = findViewById(R.id.svBackground);
-        weaponAdapter = new WeaponAdapter(this, new ArrayList<Weapon>(), null);
-        armorAdapter = new ArmorAdapter(this, new ArrayList<Armor>(), null);
+        tvBackground = findViewById(R.id.tvDescription);
+        tvArmorName = findViewById(R.id.tvArmorName);
+        tvWeaponName = findViewById(R.id.tvWeaponName);
+        tvTitle = findViewById(R.id.tvTitle);
+
+        //tvLevel = findViewById(R.id.)
+        weaponAdapter = new WeaponAdapter(this, new ArrayList<Weapon>(), null, false);
+        armorAdapter = new ArmorAdapter(this, new ArrayList<Armor>(), null,false);
 
     }
+
 
 
     private void loadCharacterDetails(int id) {
         imageView.setImageResource(R.drawable.aorus_chibi3);
         LiveData<PersonnageDetails> personnageDetails = viewModel.getPersonnageDetailsById(id);
+
         personnageDetails.observe(this, persoDetails -> {
+            setTitle(persoDetails.getPersonnage().getName());
             // Afficher les détails du personnage
             tvClass.setText(persoDetails.getClasse().getName());
             tvRace.setText(persoDetails.getRace().getName());
+
 
             // Afficher l'armure
             Armor armor = persoDetails.getArmor();
             if (armor != null) {
                 armorAdapter.updateData(Collections.singletonList(armor));
+                tvArmorName.setText(persoDetails.getArmor().getName());
             }
 
             //Afficher l'arme
@@ -108,12 +124,22 @@ private PersonnageViewModel viewModel;
             if (weapon != null) {
                 Log.d("Test", "Name: "+weapon.getName()+" Damage: "+weapon.getDamage()+" Hands: "+weapon.getHands());
                 weaponAdapter.updateData(Collections.singletonList(weapon));
+                tvWeaponName.setText(persoDetails.getWeapon().getName());
             }
             // Afficher l'histoire
-//            TextView tvBackground = new TextView(this);
-//            tvBackground.setText(persoDetails.getPersonnage().getBackground());
-//            backgroundLayout.addView(tvBackground);
+            String background = persoDetails.getPersonnage().getBackground();
+            if(background !=null) {
+                tvBackground.setText(persoDetails.getPersonnage().getBackground());
+
+            }else if(background == null && background.isEmpty()){
+                String texte = ("il n'y pas de background, Sad >uwu<");
+                persoDetails.getPersonnage().setBackground(texte);
+                tvBackground.setText(texte);
+            }
         });
+
+
+
 
         //Afficher les skills
         LiveData<List<OwnedSkill>> oSkills = viewModel.getOwnedSkillById(id);
@@ -129,6 +155,7 @@ private PersonnageViewModel viewModel;
                     OwnedSkillWithSkill ownedSkillWithSkill = new OwnedSkillWithSkill();
                     ownedSkillWithSkill.ownedSkill = oSkill;
                     ownedSkillWithSkill.skill = skill1;
+
                     ownedSkillWithSkills.add(ownedSkillWithSkill);
 
                     // Si toutes les compétences ont été récupérées, mettez à jour l'adaptateur
