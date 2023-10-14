@@ -1,6 +1,8 @@
 package com.example.thewitcher;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -38,12 +40,15 @@ private PersonnageViewModel viewModel;
     private SkillsAdapter skillsAdapter;
     private ArmorAdapter armorAdapter;
     private WeaponAdapter weaponAdapter;
+    private PersonnageDetails personnageDetails;
     private BaseRepository baseRepository;
     // Views définies dans votre fichier XML
     private ImageView imageView;
     private TextView tvClass,tvRace,tvBackground, tvLevel,tvWeaponName,tvArmorName,tvTitle;
     private RecyclerView skillsRecyclerView,armorRecyclerView,gearRecyclerView;
     private ScrollView backgroundScrollView;
+    SharedPreferences sharedPreferences;
+    
 
 
 
@@ -51,22 +56,44 @@ private PersonnageViewModel viewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnage);
-        initViews();
-        setupRecyclerViews();
-
-
-
-
-
-
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
         baseRepository = new BaseRepository(getApplication());
         viewModel = new PersonnageViewModel(getApplication());
 
         int id = getIntent().getIntExtra("persoId", 0);
+        String selectedTheme;
+        if (personnageDetails != null && personnageDetails.getRace() != null) {
+            selectedTheme = personnageDetails.getRace().getName();
+        } else {
+            selectedTheme = "Default";
+        }
+
+        switch(selectedTheme) {
+            case "Elves":
+                setTheme(R.style.Theme_TheWitcher_Elf);
+                break;
+            case "Witchers":
+                setTheme(R.style.Theme_TheWitcher_Witchers);
+                break;
+            case "Humains":
+                setTheme(R.style.Theme_TheWitcher_Human);
+                break;
+            case "Dwarves":
+                setTheme(R.style.Theme_TheWitcher_Dwarf);
+            default:
+                // thème par défaut
+                break;
+        }
+
+        setContentView(R.layout.activity_personnage);
+
+        initViews();
+        setupRecyclerViews();
         loadCharacterDetails(id);
+
     }
+
 
     private void setupRecyclerViews() {
 

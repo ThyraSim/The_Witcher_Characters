@@ -20,6 +20,7 @@ import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
+import com.example.thewitcher.Entity.PersonnageDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class AccountActivity extends AppCompatActivity {
     private PersonnageViewModel viewModel;
     private personnageAdapter adapter;
+    private PersonnageDetails personnageDetails;
     private List<PersonnageDetails> persosArray = new ArrayList<>();
     private BaseRepository baseRepository;
 
@@ -43,9 +45,31 @@ public class AccountActivity extends AppCompatActivity {
         //Création du répository complet (tous les DAO)
         baseRepository = new BaseRepository(getApplication());
 
+        String raceName;
+        if (personnageDetails != null && personnageDetails.getRace() != null) {
+            raceName = personnageDetails.getRace().getName();
+        } else {
+            raceName = "Default";
+        }
+
+        if ("Humans".equals(raceName)) {
+            setTheme(R.style.Theme_TheWitcher_Human);
+        } else if ("Elves".equals(raceName)) {
+            setTheme(R.style.Theme_TheWitcher_Elf);
+        } else if ("Dwarves".equals(raceName)) {
+            setTheme(R.style.Theme_TheWitcher_Dwarf);
+        } else if ("Witchers".equals(raceName)) {
+            setTheme(R.style.Theme_TheWitcher_Witchers);
+        } else {
+            setTheme(R.style.Theme_TheWitcher); // Theme par défaut
+        }
+
+        setContentView(R.layout.activity_account);
+
         RecyclerView listPersos = findViewById(R.id.listPerso);
 
         listPersos.setLayoutManager(new LinearLayoutManager(this));
+
 
         //Send data to adapter
         adapter = new personnageAdapter(this, persosArray, new personnageAdapter.OnItemClickListener() {

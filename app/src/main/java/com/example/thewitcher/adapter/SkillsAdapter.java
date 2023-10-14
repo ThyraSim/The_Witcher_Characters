@@ -62,6 +62,7 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
         public void bind(Skill skill, int level){
             Log.d("Test", ""+level);
             skillName.setText(skill.getNomSkill());
+            skillLevel.setText(String.valueOf(level));
         }
     }
 

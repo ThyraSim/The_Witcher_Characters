@@ -5,5 +5,34 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+
     </style>
+    <!-- Human Theme -->
+    <style name="Theme.TheWitcher.Human" parent="Theme.TheWitcher">
+        <item name="colorPrimary">@color/humanColorPrimary</item>
+        <item name="colorPrimaryDark">@color/humanColorPrimaryDark</item>
+        <!-- ... autres personnalisations spécifiques à Human ... -->
+    </style>
+
+    <!-- Elf Theme -->
+    <style name="Theme.TheWitcher.Elf" parent="Theme.TheWitcher">
+        <item name="colorPrimary">@color/elfColorPrimary</item>
+        <item name="colorPrimaryDark">@color/elfColorPrimaryDark</item>
+        <!-- ... autres personnalisations spécifiques à Elf ... -->
+    </style>
+
+    <!-- Dwarf Theme -->
+    <style name="Theme.TheWitcher.Dwarf" parent="Theme.TheWitcher">
+        <item name="colorPrimary">@color/dwarfColorPrimary</item>
+        <item name="colorPrimaryDark">@color/dwarfColorPrimaryDark</item>
+        <!-- ... autres personnalisations spécifiques à Dwarf ... -->
+    </style>
+
+    <!-- Orc Theme -->
+    <style name="Theme.TheWitcher.Witchers" parent="Theme.TheWitcher">
+        <item name="colorPrimary">@color/witchersColorPrimary</item>
+        <item name="colorPrimaryDark">@color/witchersColorPrimaryDark</item>
+        <!-- ... autres personnalisations spécifiques à Orc ... -->
+    </style>
+
 </resources>

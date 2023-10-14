@@ -1,39 +1,29 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.TheWitcher" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/backgroundColor</item>
-        <item name="colorPrimaryDark">@color/backgroundColor</item>
-
-    </style>
-    <style name="Theme.TheWitcher" parent="Base.Theme.TheWitcher" />
-    <!-- Human Theme -->
-    <style name="Theme.TheWitcher.Human" parent="Theme.TheWitcher">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TheWitcher.Human" parent="Base.Theme.TheWitcher">
         <item name="colorPrimary">@color/humanColorPrimary</item>
         <item name="colorPrimaryDark">@color/humanColorPrimaryDark</item>
         <!-- ... autres personnalisations spécifiques à Human ... -->
     </style>
 
     <!-- Elf Theme -->
-    <style name="Theme.TheWitcher.Elf" parent="Theme.TheWitcher">
+    <style name="Theme.TheWitcher.Elf" parent="Base.Theme.TheWitcher">
         <item name="colorPrimary">@color/elfColorPrimary</item>
         <item name="colorPrimaryDark">@color/elfColorPrimaryDark</item>
         <!-- ... autres personnalisations spécifiques à Elf ... -->
     </style>
 
     <!-- Dwarf Theme -->
-    <style name="Theme.TheWitcher.Dwarf" parent="Theme.TheWitcher">
+    <style name="Theme.TheWitcher.Dwarf" parent="Base.Theme.TheWitcher">
         <item name="colorPrimary">@color/dwarfColorPrimary</item>
         <item name="colorPrimaryDark">@color/dwarfColorPrimaryDark</item>
         <!-- ... autres personnalisations spécifiques à Dwarf ... -->
     </style>
 
     <!-- Orc Theme -->
-    <style name="Theme.TheWitcher.Witchers" parent="Theme.TheWitcher">
+    <style name="Theme.TheWitcher.Witchers" parent="Base.Theme.TheWitcher">
         <item name="colorPrimary">@color/witchersColorPrimary</item>
         <item name="colorPrimaryDark">@color/witchersColorPrimaryDark</item>
-        <!-- ... autres personnalisations spécifiques à Witches ... -->
+        <!-- ... autres personnalisations spécifiques à Orc ... -->
     </style>
-
-
 </resources>
