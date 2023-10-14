@@ -2,7 +2,6 @@ package com.example.thewitcher;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -16,16 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.thewitcher.Entity.OwnedSkill;
 import com.example.thewitcher.Entity.OwnedSkillWithSkill;
 import com.example.thewitcher.Entity.PersonnageDetails;
-import com.example.thewitcher.Entity.Personnage;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
+import com.example.thewitcher.adapter.ArmorAdapter;
 import com.example.thewitcher.adapter.SkillsAdapter;
+import com.example.thewitcher.adapter.WeaponAdapter;
 import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
-import com.example.thewitcher.adapter.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,29 +61,36 @@ private PersonnageViewModel viewModel;
         viewModel = new PersonnageViewModel(getApplication());
 
         int id = getIntent().getIntExtra("persoId", 0);
-        String selectedTheme;
-        if (personnageDetails != null && personnageDetails.getRace() != null) {
-            selectedTheme = personnageDetails.getRace().getName();
-        } else {
-            selectedTheme = "Default";
-        }
+        final String[] selectedTheme = new String[1];
 
-        switch(selectedTheme) {
-            case "Elves":
-                setTheme(R.style.Theme_TheWitcher_Elf);
-                break;
-            case "Witchers":
-                setTheme(R.style.Theme_TheWitcher_Witchers);
-                break;
-            case "Humains":
-                setTheme(R.style.Theme_TheWitcher_Human);
-                break;
-            case "Dwarves":
-                setTheme(R.style.Theme_TheWitcher_Dwarf);
-            default:
-                // thème par défaut
-                break;
-        }
+        LiveData<PersonnageDetails> selectedPerso = baseRepository.findPersonnageDetails(id);
+        selectedPerso.observe(this, perso ->{
+            if (perso != null && perso.getRace() != null) {
+                selectedTheme[0] = perso.getRace().getName();
+            } else {
+                selectedTheme[0] = "Default";
+            }
+
+            Log.d("DEBUG", selectedTheme[0]);
+
+            switch(selectedTheme[0]) {
+                case "Elves":
+                    setTheme(R.style.Theme_TheWitcher_Elf);
+                    break;
+                case "Witchers":
+                    setTheme(R.style.Theme_TheWitcher_Witchers);
+                    break;
+                case "Humans":
+                    setTheme(R.style.Theme_TheWitcher_Human);
+                    break;
+                case "Dwarves":
+                    setTheme(R.style.Theme_TheWitcher_Dwarf);
+                default:
+                    // thème par défaut
+                    break;
+            }
+        });
+
 
         setContentView(R.layout.activity_personnage);
 
