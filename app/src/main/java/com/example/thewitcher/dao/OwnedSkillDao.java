@@ -24,8 +24,4 @@ public interface OwnedSkillDao extends BaseDao<OwnedSkill> {
             "INNER JOIN Skill ON OwnedSkill.skill_id = Skill.id " +
             "WHERE OwnedSkill.personnage_id = :personnageId")
     LiveData<List<OwnedSkillWithSkill>> getOwnedSkillsWithDetailsByPersonnageId(int personnageId);
-
-
-
-
 }

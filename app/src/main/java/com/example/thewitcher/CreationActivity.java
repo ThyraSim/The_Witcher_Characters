@@ -23,7 +23,9 @@ import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
 import com.example.thewitcher.Entity.race.Race;
+import com.example.thewitcher.adapter.ArmorAdapter;
 import com.example.thewitcher.adapter.SkillSelectionAdapter;
+import com.example.thewitcher.adapter.WeaponAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.contracts.ArmorResultContract;
 import com.example.thewitcher.contracts.ClassResultContract;
@@ -51,6 +53,7 @@ public class CreationActivity extends AppCompatActivity {
     SkillSelectionAdapter adapter;
     SkillViewModel viewModel;
     List<Skill> skillArray = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

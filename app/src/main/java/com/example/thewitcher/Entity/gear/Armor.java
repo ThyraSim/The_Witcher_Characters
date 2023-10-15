@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Armor {
+public class Armor{
     @PrimaryKey
     @ColumnInfo(name = "id")
     private int armorId;
@@ -40,5 +40,14 @@ public class Armor {
 
     public void setSp(Integer sp) {
         this.sp = sp;
+    }
+
+    @Override
+    public String toString() {
+        return "Armor{" +
+                "armorId=" + armorId +
+                ", name='" + name + '\'' +
+                ", sp=" + sp +
+                '}';
     }
 }

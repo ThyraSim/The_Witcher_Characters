@@ -1,5 +1,6 @@
 package com.example.thewitcher;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -17,13 +18,16 @@ import com.example.thewitcher.Entity.PersonnageDetails;
 import com.example.thewitcher.Entity.Skill;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
+import com.example.thewitcher.adapter.ArmorAdapter;
 import com.example.thewitcher.adapter.SkillsAdapter;
+import com.example.thewitcher.adapter.WeaponAdapter;
 import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,56 +37,95 @@ private PersonnageViewModel viewModel;
     private personnageAdapter adapter;
     private List<PersonnageDetails> persosArray = new ArrayList<>();
     private SkillsAdapter skillsAdapter;
+    private ArmorAdapter armorAdapter;
+    private WeaponAdapter weaponAdapter;
+    private PersonnageDetails personnageDetails;
     private BaseRepository baseRepository;
-
     // Views définies dans votre fichier XML
     private ImageView imageView;
-    private TextView tvClass;
-    private TextView tvRace;
-    private TextView tvDescription;
-
-    private RecyclerView skillsRecyclerView;
-    private RecyclerView gearRecyclerView;
+    private TextView tvClass,tvRace,tvBackground, tvLevel,tvWeaponName,tvArmorName,tvTitle;
+    private RecyclerView skillsRecyclerView,armorRecyclerView,gearRecyclerView;
     private ScrollView backgroundScrollView;
-
+    SharedPreferences sharedPreferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personnage);
-        imageView = findViewById(R.id.imageView);
-        tvClass = findViewById(R.id.tvClass);
-        tvRace = findViewById(R.id.tvRace);
-        skillsRecyclerView = findViewById(R.id.skillsRecyclerView);
-        gearRecyclerView = findViewById(R.id.gearRecyclerView);
-        backgroundScrollView = findViewById(R.id.svBackground);
-
-
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
-
-        //Création du répository complet (tous les DAO)
         baseRepository = new BaseRepository(getApplication());
-
-        // Initialisation du viewModel
         viewModel = new PersonnageViewModel(getApplication());
 
-        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        skillsAdapter = new SkillsAdapter(new ArrayList<>()); // Initialize with empty list
-        skillsRecyclerView.setAdapter(skillsAdapter); // Set the adapter to RecyclerView
+        int theme = 0;
 
         int id = getIntent().getIntExtra("persoId", 0);
 
-        // Récupérer et afficher les détails du personnage
+        String selectedTheme = getIntent().getStringExtra("persoClass");
+
+        switch (selectedTheme) {
+            case "Elves":
+                theme = R.style.Theme_TheWitcher_Elf;
+                break;
+            case "Witchers":
+                theme = R.style.Theme_TheWitcher_Witchers;
+                break;
+            case "Humans":
+                theme = R.style.Theme_TheWitcher_Human;
+                break;
+            case "Dwarves":
+                theme = R.style.Theme_TheWitcher_Dwarf;
+            default:
+                // thème par défaut
+                break;
+        }
+
+        setTheme(theme);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personnage);
+        initViews();
+        setupRecyclerViews();
         loadCharacterDetails(id);
     }
 
 
+    private void setupRecyclerViews() {
+
+        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        armorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        gearRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        gearRecyclerView.setNestedScrollingEnabled(false);
+        skillsAdapter = new SkillsAdapter(new ArrayList<>());
+        skillsRecyclerView.setAdapter(skillsAdapter);
+        gearRecyclerView.setAdapter(weaponAdapter);
+        armorRecyclerView.setAdapter(armorAdapter);
+    }
+
+    private void initViews() {
+        imageView = findViewById(R.id.imageView);
+        tvClass = findViewById(R.id.tvClass);
+        tvRace = findViewById(R.id.tvRace);
+        skillsRecyclerView = findViewById(R.id.skillsRecyclerView);
+        armorRecyclerView = findViewById(R.id.armorRecyclerView);
+        gearRecyclerView = findViewById(R.id.gearRecyclerView);
+        gearRecyclerView.setNestedScrollingEnabled(false);
+        tvBackground = findViewById(R.id.tvDescription);
+        tvArmorName = findViewById(R.id.tvArmorName);
+        tvWeaponName = findViewById(R.id.tvWeaponName);
+        tvTitle = findViewById(R.id.tvTitle);
+
+        //tvLevel = findViewById(R.id.)
+        weaponAdapter = new WeaponAdapter(this, new ArrayList<Weapon>(), null, false);
+        armorAdapter = new ArmorAdapter(this, new ArrayList<Armor>(), null,false);
+
+    }
+
+
+
     private void loadCharacterDetails(int id) {
         LiveData<PersonnageDetails> personnageDetails = viewModel.getPersonnageDetailsById(id);
+
         personnageDetails.observe(this, persoDetails -> {
+            setTitle(persoDetails.getPersonnage().getName());
             //Set activity title
             setTitle(persoDetails.getPersonnage().getName());
 
@@ -103,20 +146,31 @@ private PersonnageViewModel viewModel;
             tvClass.setText(persoDetails.getClasse().getName());
             tvRace.setText(persoDetails.getRace().getName());
 
+
             // Afficher l'armure
             Armor armor = persoDetails.getArmor();
-            TextView tvArmor = new TextView(this);
-            tvArmor.setText(armor.getName());
-//            gearScrollView.addView(tvArmor);
+            if (armor != null) {
+                armorAdapter.updateData(Collections.singletonList(armor));
+                tvArmorName.setText(persoDetails.getArmor().getName());
+            }
+
             //Afficher l'arme
             Weapon weapon = persoDetails.getWeapon();
-            TextView tvWeapon = new TextView(this);
-            tvWeapon.setText(weapon.getName());
-//            gearScrollView.addView(tvWeapon);
+            if (weapon != null) {
+                Log.d("Test", "Name: "+weapon.getName()+" Damage: "+weapon.getDamage()+" Hands: "+weapon.getHands());
+                weaponAdapter.updateData(Collections.singletonList(weapon));
+                tvWeaponName.setText(persoDetails.getWeapon().getName());
+            }
             // Afficher l'histoire
-//            TextView tvBackground = new TextView(this);
-//            tvBackground.setText(persoDetails.getPersonnage().getBackground());
-//            backgroundLayout.addView(tvBackground);
+            String background = persoDetails.getPersonnage().getBackground();
+            if(background !=null) {
+                tvBackground.setText(persoDetails.getPersonnage().getBackground());
+
+            }else if(background == null && background.isEmpty()){
+                String texte = ("il n'y pas de background, Sad >uwu<");
+                persoDetails.getPersonnage().setBackground(texte);
+                tvBackground.setText(texte);
+            }
         });
 
         //Afficher les skills
@@ -133,6 +187,7 @@ private PersonnageViewModel viewModel;
                     OwnedSkillWithSkill ownedSkillWithSkill = new OwnedSkillWithSkill();
                     ownedSkillWithSkill.ownedSkill = oSkill;
                     ownedSkillWithSkill.skill = skill1;
+
                     ownedSkillWithSkills.add(ownedSkillWithSkill);
 
                     // Si toutes les compétences ont été récupérées, mettez à jour l'adaptateur

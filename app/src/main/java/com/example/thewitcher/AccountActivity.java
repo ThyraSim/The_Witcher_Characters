@@ -46,9 +46,12 @@ public class AccountActivity extends AppCompatActivity {
         //Set activity title
         setTitle("Your Characters");
 
+        setContentView(R.layout.activity_account);
+
         RecyclerView listPersos = findViewById(R.id.listPerso);
 
         listPersos.setLayoutManager(new LinearLayoutManager(this));
+
 
         //Send data to adapter
         adapter = new personnageAdapter(this, persosArray, new personnageAdapter.OnItemClickListener() {
@@ -59,6 +62,7 @@ public class AccountActivity extends AppCompatActivity {
                 Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
                 Log.d("DEBUG", "Clicked on item at position " + position + ": " + clickedPost.getPersonnage().getPersonnageId());
                 intent.putExtra("persoId", clickedPost.getPersonnage().getPersonnageId());
+                intent.putExtra("persoClass", clickedPost.getRace().getName());
                 startActivity(intent);
             }
         });

@@ -14,15 +14,22 @@ import com.example.thewitcher.R;
 
 import java.util.List;
 
-public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponViewHolder>{
+public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponViewHolder> {
+    private boolean showWeaponName = true;
     private final Context mContext;
     private List<Weapon> values;
     private final OnItemClickListener listener;
 
-    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener){
+    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener) {
         this.mContext = mContext;
         this.values = values;
         this.listener = listener;
+    }
+    public WeaponAdapter(Context mContext, List<Weapon> values, OnItemClickListener listener, boolean showWeaponName) {
+        this.mContext = mContext;
+        this.values = values;
+        this.listener = listener;
+        this.showWeaponName = showWeaponName;
     }
 
     public interface OnItemClickListener {
@@ -30,13 +37,13 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
     }
 
     @Override
-    public WeaponViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public WeaponViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_choose_weapon, parent, false);
         return new WeaponViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(WeaponViewHolder holder, int position){
+    public void onBindViewHolder(WeaponViewHolder holder, int position) {
         Weapon weapon = values.get(position);
         holder.bind(weapon);
     }
@@ -47,51 +54,68 @@ public class WeaponAdapter  extends RecyclerView.Adapter<WeaponAdapter.WeaponVie
         return itemCount;
     }
 
-    public class WeaponViewHolder extends RecyclerView.ViewHolder{
-        TextView txtWeaponName, txtDamage, txtHands;
+    public class WeaponViewHolder extends RecyclerView.ViewHolder {
         ImageView imageWeapon;
+        TextView txtWeaponName;
+        TextView txtDamage;
 
-        public WeaponViewHolder(View itemView){
+        TextView txtHands;
+
+
+
+        public WeaponViewHolder(View itemView) {
             super(itemView);
+            imageWeapon = itemView.findViewById(R.id.imageWeapon);
             txtWeaponName = itemView.findViewById(R.id.txtWeaponName);
             txtDamage = itemView.findViewById(R.id.txtDamage);
+
             txtHands = itemView.findViewById(R.id.txtHands);
-            imageWeapon = itemView.findViewById(R.id.imageWeapon);
+
         }
 
-        public void bind(final Weapon weapon){
-            txtWeaponName.setText(weapon.getName());
-            txtDamage.setText(weapon.getDamage());
-            txtHands.setText(String.valueOf(weapon.getHands()));
 
-            String resourceName = weapon.getName().toLowerCase().replace(" ", "_");
-
-            int resourceId = mContext.getResources().getIdentifier(
-                    resourceName,
-                    "drawable",
-                    mContext.getPackageName()
-            );
-
-            if(resourceId != 0) {
-                imageWeapon.setImageResource(resourceId);
-            } else {
-                imageWeapon.setImageResource(R.drawable.aorus_chibi3);
-            }
-
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    listener.onItemClick(getAdapterPosition());
+        public void bind(final Weapon weapon) {
+            if (weapon != null) {
+                if (showWeaponName){
+                    txtWeaponName.setText(weapon.getName());
+                }else if(showWeaponName == false){
+                txtWeaponName.setText("");
                 }
-            });
+                txtDamage.setText(weapon.getDamage() != null ? weapon.getDamage() : "0");
+                txtHands.setText(weapon.getHands() != null ? String.valueOf(weapon.getHands()) : "Unknown");
 
+                String resourceName = weapon.getName().toLowerCase().replace(" ", "_");
 
+                int resourceId = mContext.getResources().getIdentifier(
+                        resourceName,
+                        "drawable",
+                        mContext.getPackageName()
+                );
+
+                if (resourceId != 0) {
+                    imageWeapon.setImageResource(resourceId);
+                } else {
+                    imageWeapon.setImageResource(R.drawable.arme);
+                }
+
+                if(listener != null){
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onItemClick(getAdapterPosition());
+                        }
+                    });
+                }
+
+            }
         }
     }
 
-    public void updateData(List<Weapon> weaponArray){
-        this.values = weaponArray;
-        notifyDataSetChanged();
+
+        public void updateData(List<Weapon> weaponArray) {
+            this.values = weaponArray;
+            notifyDataSetChanged();
+        }
+
     }
 
-}

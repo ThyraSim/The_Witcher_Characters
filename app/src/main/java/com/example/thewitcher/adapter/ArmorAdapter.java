@@ -15,6 +15,7 @@ import com.example.thewitcher.R;
 import java.util.List;
 
 public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHolder> {
+    private boolean showArmorName = true;
     private final Context mContext;
     private List<Armor> values;
     private final OnItemClickListener listener;
@@ -23,6 +24,12 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
         this.mContext = mContext;
         this.values = values;
         this.listener = listener;
+    }
+    public ArmorAdapter(Context mContext, List<Armor> values, OnItemClickListener listener,boolean showArmorName){
+        this.mContext = mContext;
+        this.values = values;
+        this.listener = listener;
+        this.showArmorName = showArmorName;
     }
 
     public interface OnItemClickListener {
@@ -58,32 +65,49 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
             imageArmor = itemView.findViewById(R.id.imageArmor);
         }
 
-        public void bind(final Armor armor){
-            txtArmorName.setText(armor.getName());
-            txtSP.setText(Integer.toString(armor.getSp()));
+        public void bind(final Armor armor) {
+            if (armor != null) {
+                if (showArmorName) {
+                    txtArmorName.setText(armor.getName());
+                } else if (showArmorName == false) {
 
-            String resourceName = armor.getName().toLowerCase().replace(" ", "_");
-
-            int resourceId = mContext.getResources().getIdentifier(
-                    resourceName,
-                    "drawable",
-                    mContext.getPackageName()
-            );
-
-            if(resourceId != 0) {
-                imageArmor.setImageResource(resourceId);
-            } else {
-                imageArmor.setImageResource(R.drawable.aorus_chibi3);
-            }
-
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    listener.onItemClick(getAdapterPosition());
+                    txtArmorName.setText("");
                 }
-            });
+                if (armor.getSp() != null) {
+                    txtSP.setText(Integer.toString(armor.getSp()));
+                } else {
+                    txtSP.setText("Default Value");
+                }
+
+
+                String resourceName = armor.getName().toLowerCase().replace(" ", "_");
+
+                int resourceId = mContext.getResources().getIdentifier(
+                        resourceName,
+                        "drawable",
+                        mContext.getPackageName()
+                );
+
+                if (resourceId != 0) {
+                    imageArmor.setImageResource(resourceId);
+                } else {
+                    imageArmor.setImageResource(R.drawable.armure);
+                }
+
+                if (listener != null) {
+
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onItemClick(getAdapterPosition());
+                        }
+                    });
+                }
+
+            }
         }
     }
+
 
     public void updateData(List<Armor> armors){
         this.values = armors;
