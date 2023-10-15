@@ -2,12 +2,11 @@ package com.example.thewitcher;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -22,9 +21,7 @@ import com.example.thewitcher.Entity.classe.Classe;
 import com.example.thewitcher.Entity.gear.Armor;
 import com.example.thewitcher.Entity.gear.Weapon;
 import com.example.thewitcher.Entity.race.Race;
-import com.example.thewitcher.adapter.ArmorAdapter;
 import com.example.thewitcher.adapter.SkillSelectionAdapter;
-import com.example.thewitcher.adapter.WeaponAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.contracts.ArmorResultContract;
 import com.example.thewitcher.contracts.ClassResultContract;
@@ -46,6 +43,7 @@ public class CreationActivity extends AppCompatActivity {
     Classe classe = null;
     Armor armor = null;
     Weapon weapon = null;
+    int availableSkillPoints = 20;
     Map<Skill, Integer> skillLevels;
     BaseRepository baseRepository;
     SkillSelectionAdapter adapter;
@@ -96,16 +94,54 @@ public class CreationActivity extends AppCompatActivity {
     }
 
     private void saveCharacter() {
-        String name = txtNameInput.getText().toString();
-        int age = Integer.parseInt(txtAge.getText().toString());
-        String background = txtBackground.getText().toString();
+        String name = "";
+        if(txtNameInput.getText().toString().isEmpty()){
+            showMessage("Please enter a name");
+            return;
+        }else{
+             name = txtNameInput.getText().toString();
+        }
+        int age = 0;
+        try{
+            age = Integer.parseInt(txtAge.getText().toString());
+        } catch (NumberFormatException e){
+            showMessage("Please enter an age");
+            return;
+        }
+        String finalName = name;
+        int finalAge = age;
 
+        if(race == null){
+            showMessage("Please select a race");
+            return;
+        }
+        if(classe == null){
+            showMessage("Please select a class");
+            return;
+        }
+        if(armor == null){
+            showMessage("Please select an armor");
+            return;
+        }
+        if(weapon == null){
+            showMessage("Please select a weapon");
+            return;
+        }
+        if(availableSkillPoints != 0) { showMessage("Please use all your skill points"); return; }
+        String background = "";
+        if(txtBackground.getText().toString().isEmpty()){
+            showMessage("Please enter a background");
+            return;
+        }else{
+            background = txtBackground.getText().toString();
+        }
+        String finalBackground = background;
         CompletableFuture.supplyAsync(() -> {
             // Insert personnage and get its ID
             int personnageId = baseRepository.insertPersonnage(
-                    new Personnage(name, age, race.getRaceId(), classe.getClassId(),
+                    new Personnage(finalName, finalAge, race.getRaceId(), classe.getClassId(),
                             armor.getArmorId(), weapon.getWeaponId(),
-                            background));
+                            finalBackground));
             return personnageId;
         }).thenAccept(personnageId -> {
             // Use the personnageId to insert owned skills
@@ -130,7 +166,7 @@ public class CreationActivity extends AppCompatActivity {
                 viewModel = new SkillViewModel(getApplication(), classe.getClassId());
                 adapter = new SkillSelectionAdapter(getApplicationContext(), skillArray);
                 adapter.setOnTotalSkillLevelChangeListener(totalSkillLevel -> {
-                    int availableSkillPoints = 20 - totalSkillLevel;
+                    availableSkillPoints = 20 - totalSkillLevel;
                     if (availableSkillPoints < 0) availableSkillPoints = 0;
                     TextView txtSkillPoints = findViewById(R.id.txtSkillPoints);
                     txtSkillPoints.setText(String.valueOf(availableSkillPoints));
