@@ -104,7 +104,7 @@
         android:id="@+id/tvRace"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="8dp"
         android:hint="Race"
@@ -241,5 +241,28 @@
         app:layout_constraintBottom_toTopOf="@+id/svBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/svGear" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="Age:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/tvAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
+        android:hint="age"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/tvRace" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
