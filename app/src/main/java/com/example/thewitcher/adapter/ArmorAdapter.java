@@ -95,6 +95,7 @@ public class ArmorAdapter extends RecyclerView.Adapter<ArmorAdapter.ArmorViewHol
                 }
 
                 if (listener != null) {
+
                     itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

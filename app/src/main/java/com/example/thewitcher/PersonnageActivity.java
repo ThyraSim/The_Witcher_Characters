@@ -47,57 +47,44 @@ private PersonnageViewModel viewModel;
     private RecyclerView skillsRecyclerView,armorRecyclerView,gearRecyclerView;
     private ScrollView backgroundScrollView;
     SharedPreferences sharedPreferences;
-    
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personnage);
         //Connection à la database
         WitcherRoomDatabase database = WitcherRoomDatabase.getDatabase(this);
         baseRepository = new BaseRepository(getApplication());
         viewModel = new PersonnageViewModel(getApplication());
 
+        int theme = 0;
+
         int id = getIntent().getIntExtra("persoId", 0);
-        final String[] selectedTheme = new String[1];
 
-        LiveData<PersonnageDetails> selectedPerso = baseRepository.findPersonnageDetails(id);
-        selectedPerso.observe(this, perso ->{
-            if (perso != null && perso.getRace() != null) {
-                selectedTheme[0] = perso.getRace().getName();
-            } else {
-                selectedTheme[0] = "Default";
-            }
+        String selectedTheme = getIntent().getStringExtra("persoClass");
 
-            Log.d("DEBUG", selectedTheme[0]);
+        switch (selectedTheme) {
+            case "Elves":
+                theme = R.style.Theme_TheWitcher_Elf;
+                break;
+            case "Witchers":
+                theme = R.style.Theme_TheWitcher_Witchers;
+                break;
+            case "Humans":
+                theme = R.style.Theme_TheWitcher_Human;
+                break;
+            case "Dwarves":
+                theme = R.style.Theme_TheWitcher_Dwarf;
+            default:
+                // thème par défaut
+                break;
+        }
 
-            switch(selectedTheme[0]) {
-                case "Elves":
-                    setTheme(R.style.Theme_TheWitcher_Elf);
-                    break;
-                case "Witchers":
-                    setTheme(R.style.Theme_TheWitcher_Witchers);
-                    break;
-                case "Humans":
-                    setTheme(R.style.Theme_TheWitcher_Human);
-                    break;
-                case "Dwarves":
-                    setTheme(R.style.Theme_TheWitcher_Dwarf);
-                default:
-                    // thème par défaut
-                    break;
-            }
-        });
-
-
+        setTheme(theme);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnage);
-
         initViews();
         setupRecyclerViews();
         loadCharacterDetails(id);
-
     }
 
 
@@ -170,9 +157,6 @@ private PersonnageViewModel viewModel;
                 tvBackground.setText(texte);
             }
         });
-
-
-
 
         //Afficher les skills
         LiveData<List<OwnedSkill>> oSkills = viewModel.getOwnedSkillById(id);

@@ -20,7 +20,6 @@ import com.example.thewitcher.adapter.personnageAdapter;
 import com.example.thewitcher.connection.WitcherRoomDatabase;
 import com.example.thewitcher.repository.BaseRepository;
 import com.example.thewitcher.viewModels.PersonnageViewModel;
-import com.example.thewitcher.Entity.PersonnageDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +79,7 @@ public class AccountActivity extends AppCompatActivity {
                 Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
                 Log.d("DEBUG", "Clicked on item at position " + position + ": " + clickedPost.getPersonnage().getPersonnageId());
                 intent.putExtra("persoId", clickedPost.getPersonnage().getPersonnageId());
+                intent.putExtra("persoClass", clickedPost.getRace().getName());
                 startActivity(intent);
             }
         });
