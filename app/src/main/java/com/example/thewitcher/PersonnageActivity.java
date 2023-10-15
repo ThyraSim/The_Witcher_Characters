@@ -43,10 +43,9 @@ private PersonnageViewModel viewModel;
     private BaseRepository baseRepository;
     // Views définies dans votre fichier XML
     private ImageView imageView;
-    private TextView tvClass,tvRace,tvBackground, tvLevel,tvWeaponName,tvArmorName,tvTitle;
+    private TextView tvClass,tvRace,tvBackground, tvWeaponName,tvArmorName,tvTitle,tvAge;
     private RecyclerView skillsRecyclerView,armorRecyclerView,gearRecyclerView;
-    private ScrollView backgroundScrollView;
-    SharedPreferences sharedPreferences;
+
 
 
     @Override
@@ -112,6 +111,7 @@ private PersonnageViewModel viewModel;
         tvArmorName = findViewById(R.id.tvArmorName);
         tvWeaponName = findViewById(R.id.tvWeaponName);
         tvTitle = findViewById(R.id.tvTitle);
+        tvAge = findViewById(R.id.tvAge);
 
         //tvLevel = findViewById(R.id.)
         weaponAdapter = new WeaponAdapter(this, new ArrayList<Weapon>(), null, false);
@@ -145,6 +145,7 @@ private PersonnageViewModel viewModel;
             // Afficher les détails du personnage
             tvClass.setText(persoDetails.getClasse().getName());
             tvRace.setText(persoDetails.getRace().getName());
+            tvAge.setText(String.valueOf(persoDetails.getPersonnage().getAge()));
 
 
             // Afficher l'armure
