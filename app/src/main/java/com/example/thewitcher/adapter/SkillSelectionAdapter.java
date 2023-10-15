@@ -134,7 +134,10 @@ public class SkillSelectionAdapter extends RecyclerView.Adapter<SkillSelectionAd
             btnMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int currentLevel = skillLevels.get(skill);
+                    int currentLevel = 0;
+                    if(skillLevels.get(skill)!=null){
+                        currentLevel = skillLevels.get(skill);
+                    }
                     if(currentLevel > 0) {
                         currentLevel -= 1;
                         skillLevels.put(skill, currentLevel);
