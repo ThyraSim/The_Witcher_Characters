@@ -1,6 +1,7 @@
 package com.example.thewitcher.viewModels;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -39,6 +40,16 @@ public class PersonnageViewModel extends AndroidViewModel {
 
     public LiveData<List<OwnedSkill>> getOwnedSkillById(int id) {
         return repository.findOwnedSkillByPersonnageId(id);
+    }
+
+    public void deletePersonnage(final PersonnageDetails personnageDetails) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                repository.deletePersonnage(personnageDetails.getPersonnage());
+                return null;
+            }
+        }.execute();
     }
 }
 

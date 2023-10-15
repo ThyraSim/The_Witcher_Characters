@@ -8,7 +8,6 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,18 +53,21 @@ public class AccountActivity extends AppCompatActivity {
 
 
         //Send data to adapter
-        adapter = new personnageAdapter(this, persosArray, new personnageAdapter.OnItemClickListener() {
-            //Create onClickListener and send data to PersonnageActivity
-            @Override
-            public void onItemClick(int position) {
-                PersonnageDetails clickedPost = persosArray.get(position);
-                Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
-                Log.d("DEBUG", "Clicked on item at position " + position + ": " + clickedPost.getPersonnage().getPersonnageId());
-                intent.putExtra("persoId", clickedPost.getPersonnage().getPersonnageId());
-                intent.putExtra("persoClass", clickedPost.getRace().getName());
-                startActivity(intent);
-            }
-        });
+        adapter = new personnageAdapter(
+                this,
+                persosArray,
+                position -> {
+                    PersonnageDetails clickedPost = persosArray.get(position);
+                    Intent intent = new Intent(AccountActivity.this, PersonnageActivity.class);
+                    Log.d("DEBUG", "Clicked on item at position " + position + ": " + clickedPost.getPersonnage().getPersonnageId());
+                    intent.putExtra("persoId", clickedPost.getPersonnage().getPersonnageId());
+                    intent.putExtra("persoClass", clickedPost.getRace().getName());
+                    startActivity(intent);
+                },
+                personnageDetails -> {
+                    viewModel.deletePersonnage(personnageDetails);
+                }
+        );
         listPersos.setAdapter(adapter);
 
         // Initialize ViewModel
@@ -94,10 +96,6 @@ public class AccountActivity extends AppCompatActivity {
         if (itemId == R.id.itemAdd) {
             Intent intent = new Intent(this, CreationActivity.class);
             startActivity(intent);
-        } else if (itemId == R.id.itemConfig) {
-            Toast.makeText(this, "Enter into config", Toast.LENGTH_SHORT).show();
-        } else if (itemId == R.id.itemLogout) {
-            finish();
         } else {
             return super.onOptionsItemSelected(item);
         }

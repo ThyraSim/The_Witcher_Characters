@@ -1,10 +1,8 @@
 package com.example.thewitcher.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thewitcher.Entity.PersonnageDetails;
-import com.example.thewitcher.PersonnageActivity;
 import com.example.thewitcher.R;
 
 import java.util.List;
@@ -25,11 +22,13 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
     private List<PersonnageDetails> values;
 
     private final OnItemClickListener listener;
+    private OnItemDeletedListener deletionListener;
 
-    public personnageAdapter(Context mContext, List<PersonnageDetails> values, OnItemClickListener listener) {
+    public personnageAdapter(Context mContext, List<PersonnageDetails> values, OnItemClickListener listener, OnItemDeletedListener deletionListener) {
         this.mContext = mContext;
         this.values = values;
         this.listener = listener;
+        this.deletionListener = deletionListener;
     }
 
     public interface OnItemClickListener {
@@ -48,6 +47,11 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
         holder.bind(personnageDetails);
 
     }
+
+    public interface OnItemDeletedListener {
+        void onItemDeleted(PersonnageDetails personnageDetails);
+    }
+
 
     @Override
     public int getItemCount() {
@@ -99,19 +103,13 @@ public class personnageAdapter extends RecyclerView.Adapter<personnageAdapter.Pe
                     PopupMenu popupMenu = new PopupMenu(mContext, imageShowPopup);
                     popupMenu.getMenuInflater().inflate(R.menu.list_popup_menu, popupMenu.getMenu());
 
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            if (item.getItemId() == R.id.itemShow) {
-                                Intent intent = new Intent(mContext, PersonnageActivity.class);
-                                intent.putExtra("titre", personnageDetails.getPersonnage().getName());
-                                mContext.startActivity(intent);
-                            } else if (item.getItemId() == R.id.itemDelete) {
-                                values.remove(getAdapterPosition());
-                                notifyDataSetChanged();
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == R.id.itemDelete) {
+                            if (deletionListener != null) {
+                                deletionListener.onItemDeleted(personnageDetails);
                             }
-                            return true;
                         }
+                        return true;
                     });
                     popupMenu.show();
                 }

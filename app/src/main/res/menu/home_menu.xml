@@ -7,10 +7,4 @@
         android:icon="@drawable/ic_add"
         android:title="Ajouter"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/itemConfig"
-        android:title="Configuration" />
-    <item
-        android:id="@+id/itemLogout"
-        android:title="Se Deconnecter" />
 </menu>

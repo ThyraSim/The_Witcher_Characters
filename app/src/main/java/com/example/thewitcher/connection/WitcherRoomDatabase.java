@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Classe.class, Race.class, Weapon.class, Armor.class, OwnedSkill.class,
-                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 37, exportSchema = false)
+                    Personnage.class, Skill.class, ClasseSkillCrossRef.class}, version = 38, exportSchema = false)
 public abstract class WitcherRoomDatabase extends RoomDatabase {
     public abstract ClasseDao classeDao();
     public abstract ClasseSkillCrossRefDao classeSkillCrossRefDao();
@@ -80,12 +80,6 @@ public abstract class WitcherRoomDatabase extends RoomDatabase {
                 }
                 for(Armor armor : BaseEntities.getArmorsToInsert()){
                     INSTANCE.armorDao().insert(armor);
-                }
-                for(Personnage personnage : BaseEntities.getPersonnagesToInsert()){
-                    INSTANCE.personnageDao().insert(personnage);
-                }
-                for(OwnedSkill ownedSkill : BaseEntities.getOwnedSkillsToInsert()){
-                    INSTANCE.ownedSkillDao().insert(ownedSkill);
                 }
             }
             return null;

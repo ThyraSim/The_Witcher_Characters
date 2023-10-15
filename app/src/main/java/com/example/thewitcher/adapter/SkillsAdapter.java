@@ -42,7 +42,6 @@ public class SkillsAdapter extends RecyclerView.Adapter<SkillsAdapter.SkillViewH
     }
 
     public void updateSkills(List<OwnedSkillWithSkill> skills) {
-//        List<OwnedSkillWithSkill> newSkills = null;
         this.skills = skills;
         notifyDataSetChanged();
     }
